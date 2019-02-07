@@ -10,4 +10,9 @@ public abstract class ValidationBaseComponent extends UtilsBaseComponent {
    */
   @Autowired
   protected IdentityUtil identityUtil;
+  /**
+   * The utility used for verifying correct data on a user.
+   */
+  @Autowired
+  protected UserUtil userUtil;
 }

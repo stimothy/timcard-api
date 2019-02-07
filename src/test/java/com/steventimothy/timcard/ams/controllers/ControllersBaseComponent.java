@@ -1,7 +1,6 @@
 package com.steventimothy.timcard.ams.controllers;
 
 import com.steventimothy.timcard.ams.AmsBaseComponent;
-import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.users.User;
 import org.springframework.http.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -9,41 +8,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class ControllersBaseComponent extends AmsBaseComponent {
-
-  /**
-   * Creates a local user.
-   *
-   * @return A local user.
-   */
-  protected User createLocalUser() {
-    return createLocalUser(createLocalGeneralUserId(), "testUser4", "testUser4@test.com", "ch33t@sRunFaSt");
-  }
-
-  /**
-   * Creates a local user.
-   *
-   * @return a local user.
-   */
-  protected User createAltLocalUser() {
-    return createLocalUser(createAltLocalGeneralUserId(), "testUser5", "testUser5@test.com", "anTsW@lk!na1ine");
-  }
-
-  /**
-   * Creates a local user.
-   *
-   * @param userId   The userId of the user.
-   * @param username The username of th euser.
-   * @param email    The email of the user.
-   * @param password The password of the user.
-   * @return The newly created user.
-   */
-  protected User createLocalUser(UserId userId, String username, String email, String password) {
-    return new User()
-        .userId(userId)
-        .username(username)
-        .email(email)
-        .password(password);
-  }
 
   /**
    * Creates a user.

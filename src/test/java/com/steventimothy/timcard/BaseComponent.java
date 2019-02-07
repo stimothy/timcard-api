@@ -7,6 +7,9 @@ import com.steventimothy.timcard.schemas.ids.sessions.UserSessionId;
 import com.steventimothy.timcard.schemas.ids.users.AdminUserId;
 import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
+import com.steventimothy.timcard.schemas.users.User;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +33,18 @@ public abstract class BaseComponent {
    */
   @Autowired
   protected TestRestTemplate restTemplate;
+  /**
+   * Used to encrypt passwords
+   */
+  private static StrongPasswordEncryptor strongPasswordEncryptor;
+
+  /**
+   * Sets up the class variables.
+   */
+  @BeforeClass
+  public static void beforeClass() {
+    strongPasswordEncryptor = new StrongPasswordEncryptor();
+  }
 
   /**
    * Creates a local general session id.
@@ -136,6 +151,41 @@ public abstract class BaseComponent {
   }
 
   /**
+   * Creates a local user.
+   *
+   * @return A local user.
+   */
+  protected User createLocalUser() {
+    return createLocalUser(createLocalGeneralUserId(), "testUser4", "testUser4@test.com", "ch33t@sRunFaSt");
+  }
+
+  /**
+   * Creates a local user.
+   *
+   * @return a local user.
+   */
+  protected User createAltLocalUser() {
+    return createLocalUser(createAltLocalGeneralUserId(), "testUser5", "testUser5@test.com", "anTsW@lk!na1ine");
+  }
+
+  /**
+   * Creates a local user.
+   *
+   * @param userId   The userId of the user.
+   * @param username The username of th euser.
+   * @param email    The email of the user.
+   * @param password The password of the user.
+   * @return The newly created user.
+   */
+  protected User createLocalUser(UserId userId, String username, String email, String password) {
+    return new User()
+        .userId(userId)
+        .username(username)
+        .email(email)
+        .password(encryptPassword(password));
+  }
+
+  /**
    * Gets a general session id.
    *
    * @return The general session id.
@@ -159,6 +209,15 @@ public abstract class BaseComponent {
     return this.restTemplate.exchange(RequestEntity.get(UriComponentsBuilder.fromUriString(getUasHost())
         .build().toUri())
         .build(), String.class);
+  }
+
+  /**
+   * Encrypts a password.
+   * @param password the password to encrypt.
+   * @return The encrypted password.
+   */
+  protected String encryptPassword(String password) {
+    return strongPasswordEncryptor.encryptPassword(password);
   }
 
   /**

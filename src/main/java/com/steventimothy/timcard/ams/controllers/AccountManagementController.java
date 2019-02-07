@@ -1,6 +1,7 @@
 package com.steventimothy.timcard.ams.controllers;
 
 import com.steventimothy.timcard.ams.services.AccountManagementService;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
@@ -42,20 +43,17 @@ public class AccountManagementController {
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
                                    @RequestBody User user) {
-
     try {
       SessionId sessionId = this.identityUtil.validate(authorizationHeader, Role.GENERAL.getPermissions());
 
       UserId userId = this.accountManagementService.createUser(user);
 
-      if (userId.getEncodedValue() != null) {
-        log.info("[200] POST: /ams - sessionId={} - Response: userId={}", sessionId, userId);
-        return ResponseEntity.ok(userId.getEncodedValue());
-      }
-      else {
-        log.warn("[400] POST: /ams - sessionId={} - Invalid data", sessionId);
-        return ResponseEntity.badRequest().build();
-      }
+      log.info("[200] POST: /ams - sessionId={} - Response: userId={}", sessionId, userId);
+      return ResponseEntity.ok(userId.getEncodedValue());
+    }
+    catch (InvalidDataException ex) {
+      log.warn("[400] POST: /ams - sessionId={} - {}", authorizationHeader, ex.getMessage());
+      return ResponseEntity.badRequest().build();
     }
     catch (UnauthorizedException ex) {
       log.warn("[401] POST: /ams - sessionId={} - {}", authorizationHeader, ex.getMessage());

@@ -66,6 +66,45 @@ public class IdMapper {
   }
 
   /**
+   * Maps an encoded value to a raw id.
+   *
+   * @param encodedValue The encoded value to map.
+   * @return The raw id of the session id.
+   * @throws IllegalArgumentException Throws if it could not map the encoded value to a raw id.
+   */
+  public UUID mapSessionIdToRawId(SessionId sessionId) throws IllegalArgumentException {
+    return UUID.fromString(mapIdToRawId(sessionId));
+  }
+
+  /**
+   * Maps an encoded value to a raw id.
+   * @param encodedValue The encoded value to map.
+   * @return The raw id of the user id.
+   * @throws IllegalArgumentException Throws if the encoded value could not be mapped.
+   */
+  public Long mapUserIdToRawId(UserId userId) throws IllegalArgumentException {
+    return Long.parseLong(mapIdToRawId(userId));
+  }
+
+  /**
+   * Maps an encoded value to a raw id string.
+   * @param encodedValue The encoded value to map.
+   * @return The raw id as a string of the encoded value.
+   * @throws IllegalArgumentException throws if the encoded value cannot me mapped to an id.
+   */
+  public String mapIdToRawId(Id id) throws IllegalArgumentException {
+    if (id != null && id.getEncodedValue() != null) {
+      String[] strs = id.getEncodedValue().split("\\.");
+
+      if (strs.length == 3) {
+        return strs[2];
+      }
+    }
+
+    throw new IllegalArgumentException("Couldn't map encodedValue to raw Id");
+  }
+
+  /**
    * Maps the decoded state of the sessionId to a sessionId.
    *
    * @param type  The type of sessionId.

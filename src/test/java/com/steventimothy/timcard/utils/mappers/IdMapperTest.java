@@ -3,6 +3,7 @@ package com.steventimothy.timcard.utils.mappers;
 import com.steventimothy.timcard.schemas.ids.Id;
 import com.steventimothy.timcard.schemas.ids.sessions.GeneralSessionId;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
+import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import org.junit.Test;
 
@@ -139,5 +140,68 @@ public class IdMapperTest extends MappersBaseComponent {
   @Test(expected = IllegalArgumentException.class)
   public void testMapEncodedValueToId_Invalid_FirstIdentifier() {
     super.idMapper.mapEncodedValueToId("hippo.admin." + UUID.randomUUID());
+  }
+
+  /**
+   * Tests that a session id can be mapped to a raw id.
+   */
+  @Test
+  public void testMapSessionIdToRawId_Valid() {
+    UUID uuid = UUID.randomUUID();
+    SessionId sessionId = new GeneralSessionId(uuid);
+
+    UUID uuid2 = super.idMapper.mapSessionIdToRawId(sessionId);
+
+    assertThat(uuid2)
+        .isNotNull()
+        .isEqualTo(uuid);
+  }
+
+  /**
+   * Tests that a bad sessionId throws exception.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapSessionIdToRawId_Invalid() {
+    super.idMapper.mapSessionIdToRawId(null);
+  }
+
+  /**
+   * Tests that a user id can be mapped to a raw id.
+   */
+  @Test
+  public void testMapUserIdToRawId_Valid() {
+    Long rawId = 1L;
+    UserId userId = new GeneralUserId(rawId);
+
+    Long rawId2 = super.idMapper.mapUserIdToRawId(userId);
+
+    assertThat(rawId2)
+        .isNotNull()
+        .isEqualTo(rawId);
+  }
+
+  /**
+   * Tests that a bad userId throws exception.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapUserIdToRawId_Invalid() {
+    super.idMapper.mapUserIdToRawId(null);
+  }
+
+  /**
+   * Tests that mapping id to raw id is invalid due to null id.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapIdToRawId_Invalid_NullId() {
+    super.idMapper.mapIdToRawId(null);
+  }
+
+  /**
+   * Tests that mapping id to raw id is invalid due to null encoded value.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapIdToRawId_Invalid_NullEncodedValue() {
+    UserId userId = new GeneralUserId();
+    super.idMapper.mapIdToRawId(userId);
   }
 }
