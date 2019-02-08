@@ -2,6 +2,7 @@ package com.steventimothy.timcard.uas.controllers;
 
 import com.steventimothy.timcard.schemas.ids.sessions.GeneralSessionId;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
+import com.steventimothy.timcard.uas.services.UserAuthorizationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,18 @@ import java.util.UUID;
 public class UserAuthorizationController {
 
   /**
+   * The class that contains the logic for these endpoints.
+   */
+  private UserAuthorizationService userAuthorizationService;
+
+  /**
    * Gets a general session id to use in the system.
    *
    * @return The general session id.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity getGeneralSessionId() {
-    SessionId sessionId = new GeneralSessionId(UUID.randomUUID());
+    SessionId sessionId = this.userAuthorizationService.createGeneralSessionId();
 
     log.info("[200] GET: /uas - Response: body={}", sessionId.getEncodedValue());
     return ResponseEntity.ok(sessionId.getEncodedValue());

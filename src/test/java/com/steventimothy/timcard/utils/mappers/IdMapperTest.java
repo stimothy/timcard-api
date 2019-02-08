@@ -1,10 +1,11 @@
 package com.steventimothy.timcard.utils.mappers;
 
 import com.steventimothy.timcard.schemas.ids.Id;
-import com.steventimothy.timcard.schemas.ids.sessions.GeneralSessionId;
-import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
+import com.steventimothy.timcard.schemas.ids.sessions.*;
+import com.steventimothy.timcard.schemas.ids.users.AdminUserId;
 import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
+import com.steventimothy.timcard.schemas.ids.users.UserIdType;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -203,5 +204,148 @@ public class IdMapperTest extends MappersBaseComponent {
   public void testMapIdToRawId_Invalid_NullEncodedValue() {
     UserId userId = new GeneralUserId();
     super.idMapper.mapIdToRawId(userId);
+  }
+
+  /**
+   * Tests that the idMapper can map a string raw id of session id to a sessionId.
+   */
+  @Test
+  public void testMapRawIdToSessionId_String_Valid() {
+    UUID uuid = UUID.randomUUID();
+    SessionId sessionId = super.idMapper.mapRawIdToSessionId(uuid.toString(), SessionIdType.GENERAL);
+
+    assertThat(sessionId.getEncodedValue())
+        .contains(uuid.toString());
+
+    UUID uuid2 = super.idMapper.mapSessionIdToRawId(sessionId);
+
+    assertThat(uuid2)
+        .isEqualTo(uuid);
+  }
+
+  /**
+   * Tests that the idMapper can map a uuid raw id of session id to a sessionId.
+   */
+  @Test
+  public void testMapRawIdToSessionId_UUID_Valid() {
+    UUID uuid = UUID.randomUUID();
+    SessionId sessionId = super.idMapper.mapRawIdToSessionId(uuid, SessionIdType.GENERAL);
+
+    assertThat(sessionId.getEncodedValue())
+        .contains(uuid.toString());
+
+    UUID uuid2 = super.idMapper.mapSessionIdToRawId(sessionId);
+
+    assertThat(uuid2)
+        .isEqualTo(uuid);
+  }
+
+  /**
+   * Tests that the idMapper can map a uuid raw id of session id to a sessionId.
+   */
+  @Test
+  public void testMapRawIdToUserIdId_Valid() {
+    Long rawId = 1L;
+    UserId userId = super.idMapper.mapRawIdToUserId(rawId, UserIdType.GENERAL);
+
+    assertThat(userId.getEncodedValue())
+        .contains(rawId.toString());
+
+    Long rawId2 = super.idMapper.mapUserIdToRawId(userId);
+
+    assertThat(rawId2)
+        .isEqualTo(rawId);
+  }
+
+  /**
+   * Tests that a raw id can be mapped to a generalId.
+   */
+  @Test
+  public void testMapRawIdToSessionId_Valid_GeneralId() {
+    UUID uuid = UUID.randomUUID();
+    SessionId sessionId = super.idMapper.mapRawIdToSessionId(uuid, SessionIdType.GENERAL);
+
+    assertThat(sessionId)
+        .isInstanceOf(GeneralSessionId.class);
+  }
+
+  /**
+   * Tests that a raw id can be mapped to a userId.
+   */
+  @Test
+  public void testMapRawIdToSessionId_Valid_UserId() {
+    UUID uuid = UUID.randomUUID();
+    SessionId sessionId = super.idMapper.mapRawIdToSessionId(uuid, SessionIdType.USER);
+
+    assertThat(sessionId)
+        .isInstanceOf(UserSessionId.class);
+  }
+
+  /**
+   * Tests that a raw id can be mapped to a adminId.
+   */
+  @Test
+  public void testMapRawIdToSessionId_Valid_AdminId() {
+    UUID uuid = UUID.randomUUID();
+    SessionId sessionId = super.idMapper.mapRawIdToSessionId(uuid, SessionIdType.ADMIN);
+
+    assertThat(sessionId)
+        .isInstanceOf(AdminSessionId.class);
+  }
+
+  /**
+   * Tests that a raw id can be mapped to a general user id.
+   */
+  @Test
+  public void testMapRawIdToUserId_Valid_General() {
+    Long rawId = 1L;
+    UserId userId = super.idMapper.mapRawIdToUserId(rawId, UserIdType.GENERAL);
+
+    assertThat(userId)
+        .isInstanceOf(GeneralUserId.class);
+  }
+
+  /**
+   * Tests that a raw id can be mapped to an admin user id.
+   */
+  @Test
+  public void testMapRawIdToUserId_Valid_Admin() {
+    Long rawId = 1L;
+    UserId userId = super.idMapper.mapRawIdToUserId(rawId, UserIdType.ADMIN);
+
+    assertThat(userId)
+        .isInstanceOf(AdminUserId.class);
+  }
+
+  /**
+   * Tests that mapping a raw id to id will throw exception due to invalid uuid string.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapRawIdToSessionId_String_Invalid() {
+    super.idMapper.mapRawIdToSessionId("hippo", SessionIdType.GENERAL);
+  }
+
+  /**
+   * Tests that a null raw id throws exception
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapRawIdToSessionId_String_Null() {
+    super.idMapper.mapRawIdToSessionId((String) null, SessionIdType.GENERAL);
+  }
+
+  /**
+   * Tests that a null raw id throws exception
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapRawIdToSessionId_Uuid_Null() {
+    super.idMapper.mapRawIdToSessionId((UUID) null, SessionIdType.GENERAL);
+  }
+
+  /**
+   * Tests that a null raw id throws exception
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testMapRawIdToUserId_Null() {
+    super.idMapper.mapRawIdToUserId(null, UserIdType.GENERAL);
   }
 }

@@ -1,6 +1,7 @@
 package com.steventimothy.timcard.ams.services;
 
 import com.steventimothy.timcard.repository.timcard.users.UsersDataService;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseConflictException;
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.users.User;
@@ -33,8 +34,10 @@ public class AccountManagementService {
    *
    * @param user The user wanted to be created.
    * @return The userId of the user that was created.
+   * @throws InvalidDataException throws if the user data is invalid.
+   * @throws DatabaseConflictException throws if there was a conflict in the database.
    */
-  public UserId createUser(User user) {
+  public UserId createUser(User user) throws InvalidDataException, DatabaseConflictException {
     if (userUtil.validateUserCreation(user)) {
       return usersDataService.createUser(user);
     }
