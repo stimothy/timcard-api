@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 /**
  * <h1>The GeneralSessionId Class</h1>
  * <p>This class holds the id for a general Session.</p>
@@ -40,7 +38,7 @@ public class GeneralSessionId extends SessionId {
    * The constructor for setting the raw id.
    * @param rawId The raw id of the session.
    */
-  public GeneralSessionId(UUID rawId) {
+  public GeneralSessionId(String rawId) {
     super(rawId);
   }
 }

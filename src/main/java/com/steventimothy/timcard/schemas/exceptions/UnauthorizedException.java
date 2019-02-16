@@ -14,4 +14,13 @@ public class UnauthorizedException extends RuntimeException {
   public UnauthorizedException(String message) {
     super(message);
   }
+
+  /**
+   * The constructor.
+   * @param message The message as why this exception was thrown.
+   * @param throwable The throwable that caused this exception.
+   */
+  public UnauthorizedException(String message, Throwable throwable) {
+    super(message, throwable);
+  }
 }

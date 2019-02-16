@@ -1,6 +1,5 @@
 package com.steventimothy.timcard.utils.mappers;
 
-import com.steventimothy.timcard.schemas.exceptions.DatabaseConflictException;
 import com.steventimothy.timcard.schemas.exceptions.ForbiddenException;
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
@@ -39,10 +38,6 @@ public class ExceptionMapper {
     else if (ForbiddenException.class.equals(ex.getClass())) {
       log.warn("[403] {}: {} - sessionId={} - {}", method, path, sessionId, ex.getMessage());
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
-    else if (DatabaseConflictException.class.equals(ex.getClass())) {
-      log.warn("[409] {}: {} - sessionId={} - {}", method, path, sessionId, ex.getMessage());
-      return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
     else {
       log.warn("[500] {}: {} - sessionId={} - {}", method, path, sessionId, ex.getMessage());

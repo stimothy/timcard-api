@@ -13,13 +13,13 @@ public class UserSessionIdTest extends SessionsBaseComponent {
    */
   @Test
   public void testUserSessionId_GetEncodedValue() {
-    UUID uuid = UUID.randomUUID();
-    SessionId id = createLocalUserSessionId(uuid);
+    String rawId = UUID.randomUUID().toString();
+    SessionId id = createLocalUserSessionId(rawId);
 
     assertThat(id.getEncodedValue())
         .isNotNull()
         .startsWith("session.user.")
-        .endsWith(uuid.toString());
+        .endsWith(rawId);
 
     SessionId id2 = createLocalUserSessionId(null);
 
@@ -32,8 +32,8 @@ public class UserSessionIdTest extends SessionsBaseComponent {
    */
   @Test
   public void testUserSessionId_ToString() {
-    UUID uuid = UUID.randomUUID();
-    SessionId id = createLocalUserSessionId(uuid);
+    String rawId = UUID.randomUUID().toString();
+    SessionId id = createLocalUserSessionId(rawId);
 
     assertThat(id.toString())
         .isNotNull()

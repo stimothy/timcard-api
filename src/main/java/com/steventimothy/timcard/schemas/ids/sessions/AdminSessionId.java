@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 /**
  * <h1>The AdminSessionId Class</h1>
  * <p>This class holds the id for an admin Session.</p>
@@ -40,7 +38,7 @@ public class AdminSessionId extends SessionId {
    * The constructor for setting the raw id.
    * @param rawId The raw id of the session.
    */
-  public AdminSessionId(UUID rawId) {
+  public AdminSessionId(String rawId) {
     super(rawId);
   }
 }

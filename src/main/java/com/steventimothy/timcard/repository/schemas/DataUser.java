@@ -16,9 +16,13 @@ import java.time.Instant;
 public class DataUser {
 
   /**
-   * The id of the user.
+   * The id.
    */
   private Long id;
+  /**
+   * The id of the user.
+   */
+  private String user_id;
   /**
    * The username of the user.
    */
@@ -30,7 +34,11 @@ public class DataUser {
   /**
    * The encrypted password of the user.
    */
-  private String enc_password;
+  private String password;
+  /**
+   * The salt used to hash the password.
+   */
+  private String salt;
   /**
    * The date the user was created.
    */

@@ -11,13 +11,13 @@ public class AdminUserIdTest extends UsersBaseComponent {
    */
   @Test
   public void testAdminUserId_GetEncodedValue() {
-    Long rawId = 4L;
+    String rawId = "T-TTT";
     UserId id = createLocalAdminUserId(rawId);
 
     assertThat(id.getEncodedValue())
         .isNotNull()
         .startsWith("user.admin.")
-        .endsWith(rawId.toString());
+        .endsWith(rawId);
 
     UserId id2 = createLocalGeneralUserId(null);
 
@@ -30,7 +30,7 @@ public class AdminUserIdTest extends UsersBaseComponent {
    */
   @Test
   public void testAdminUserId_ToString() {
-    Long rawId = 4L;
+    String rawId = "T-TTT";
     UserId id = createLocalAdminUserId(rawId);
 
     assertThat(id.toString())

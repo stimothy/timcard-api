@@ -31,10 +31,10 @@ public class UserMapper {
    */
   public DataUser map(User user) {
     return new DataUser()
-        .id(this.idMapper.mapUserIdToRawId(user.userId()))
+        .user_id(this.idMapper.mapUserIdToRawId(user.userId()))
         .username(user.username())
         .email(user.email())
-        .enc_password(user.password());
+        .password(user.password());
   }
 
   /**
@@ -46,12 +46,12 @@ public class UserMapper {
    * @throws UnsupportedOperationException Throws if the userType is not recognizable.
    */
   public User map(DataUser dataUser, UserIdType userType) throws UnsupportedOperationException {
-    UserId userId = idMapper.mapRawIdToUserId(dataUser.id(), userType);
+    UserId userId = idMapper.mapRawIdToUserId(dataUser.user_id(), userType);
 
     return new User()
         .userId(userId)
         .username(dataUser.username())
         .email(dataUser.email())
-        .password(dataUser.enc_password());
+        .password(dataUser.password());
   }
 }

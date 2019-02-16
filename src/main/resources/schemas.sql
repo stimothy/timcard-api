@@ -1,57 +1,91 @@
 -- Database Timcard
 CREATE DATABASE timcard;
 
+-- User Ids table
+CREATE TABLE IF NOT EXISTS user_ids
+(
+  id      BIGINT  NOT NULL AUTO_INCREMENT,
+  user_id CHAR(5) NOT NULL UNIQUE,
+  used    BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (id)
+);
+
 -- Users Table
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
+  user_id       CHAR(5)      NOT NULL UNIQUE,
   username      VARCHAR(50)  NOT NULL UNIQUE,
   email         VARCHAR(100) NOT NULL UNIQUE,
-  enc_password  CHAR(64)     NOT NULL,
-  date_created  DATETIME     NOT NULL,
-  last_modified DATETIME     NOT NULL,
+  password      CHAR(88)     NOT NULL,
+  salt          CHAR(88)     NOT NULL,
+  date_created  DATETIME     NOT NULL DEFAULT NOW(),
+  last_modified DATETIME     NOT NULL DEFAULT NOW(),
   PRIMARY KEY (id),
-  INDEX usr_pass_ind (username, enc_password),
-  INDEX eml_pass_ind (email, enc_password)
-) AUTO_INCREMENT = 101;
+  FOREIGN KEY (user_id) REFERENCES user_ids (user_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  UNIQUE INDEX usr_pass_ind (username, password),
+  UNIQUE INDEX eml_pass_ind (email, password)
+);
+
+-- users to user_id used trigger
+DELIMITER $$
+CREATE TRIGGER user_id_trig
+  AFTER DELETE ON users
+  FOR EACH ROW
+BEGIN
+  UPDATE user_ids SET used = 0
+  WHERE user_id = old.user_id;
+END$$
+DELIMITER ;
 
 -- Sessions Table
-CREATE TABLE sessions
+CREATE TABLE IF NOT EXISTS sessions
 (
-  id            CHAR(36) NOT NULL,
-  user_id       BIGINT   NOT NULL,
+  id            BIGINT   NOT NULL AUTO_INCREMENT,
+  session_id    CHAR(36) NOT NULL UNIQUE,
+  user_id       CHAR(5)  NOT NULL,
   expiration    DATETIME NOT NULL,
-  date_created  DATETIME NOT NULL,
-  last_modified DATETIME NOT NULL,
+  date_created  DATETIME NOT NULL DEFAULT NOW(),
+  last_modified DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users (id)
+  FOREIGN KEY (user_id) REFERENCES users (user_id)
     ON UPDATE CASCADE
     ON DELETE CASCADE,
   INDEX usr_ind (user_id)
 );
 
 -- Roles Table
-CREATE TABLE roles
+CREATE TABLE IF NOT EXISTS roles
 (
-  id   BIGINT      NOT NULL AUTO_INCREMENT,
-  name VARCHAR(50) NOT NULL UNIQUE,
+  id            BIGINT      NOT NULL AUTO_INCREMENT,
+  name          VARCHAR(50) NOT NULL UNIQUE,
+  date_created  DATETIME    NOT NULL DEFAULT NOW(),
+  last_modified DATETIME    NOT NULL DEFAULT NOW(),
   PRIMARY KEY (id)
-) AUTO_INCREMENT = 101;
+);
 
 -- Permissions Table
 CREATE TABLE permissions
 (
-  id   BIGINT      NOT NULL AUTO_INCREMENT,
-  name VARCHAR(50) NOT NULL UNIQUE,
+  id            BIGINT      NOT NULL AUTO_INCREMENT,
+  name          VARCHAR(50) NOT NULL UNIQUE,
+  date_created  DATETIME    NOT NULL DEFAULT NOW(),
+  last_modified DATETIME    NOT NULL DEFAULT NOW(),
   PRIMARY KEY (id)
-) AUTO_INCREMENT = 101;
+);
 
 -- Role Permissions Table
-CREATE TABLE role_permissions
+CREATE TABLE IF NOT EXISTS role_permissions
 (
-  role_id       BIGINT NOT NULL,
-  permission_id BIGINT NOT NULL,
-  PRIMARY KEY (role_id, permission_id),
+  id            BIGINT   NOT NULL AUTO_INCREMENT,
+  role_id       BIGINT   NOT NULL,
+  permission_id BIGINT   NOT NULL,
+  date_created  DATETIME NOT NULL DEFAULT NOW(),
+  last_modified DATETIME NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (id),
+  UNIQUE (role_id, permission_id),
   FOREIGN KEY (role_id) REFERENCES roles (id)
     ON UPDATE CASCADE
     ON DELETE CASCADE,
@@ -63,17 +97,21 @@ CREATE TABLE role_permissions
 );
 
 -- User Roles Table
-CREATE TABLE user_roles
+CREATE TABLE IF NOT EXISTS user_roles
 (
-  user_id BIGINT NOT NULL,
-  role_id BIGINT NOT NULL,
-  PRIMARY KEY (user_id, role_id),
-  FOREIGN KEY (user_id) REFERENCES users (id)
+  id            BIGINT   NOT NULL AUTO_INCREMENT,
+  user_id       CHAR(5)  NOT NULL,
+  role_id       BIGINT   NOT NULL,
+  date_created  DATETIME NOT NULL DEFAULT NOW(),
+  last_modified DATETIME NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (id),
+  UNIQUE (user_id, role_id),
+  FOREIGN KEY (user_id) REFERENCES users (user_id)
     ON UPDATE CASCADE
     ON DELETE CASCADE,
   FOREIGN KEY (role_id) REFERENCES roles (id)
     ON UPDATE CASCADE
-    ON DELETe CASCADE,
+    ON DELETE CASCADE,
   INDEX usr_ind (user_id),
   INDEX role_ind (role_id)
 );

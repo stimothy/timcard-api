@@ -24,14 +24,14 @@ public abstract class UserId implements Id {
   /**
    * The raw id of a user.
    */
-  protected Long rawId;
+  protected String rawId;
 
 
   /**
    * The constructor that sets the userId.
    * @param rawId The id of the user.
    */
-  protected UserId(Long rawId) {
+  protected UserId(String rawId) {
     this.rawId = rawId;
   }
 }

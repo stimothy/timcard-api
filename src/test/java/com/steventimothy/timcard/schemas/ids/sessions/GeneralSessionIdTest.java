@@ -13,13 +13,13 @@ public class GeneralSessionIdTest extends SessionsBaseComponent {
    */
   @Test
   public void testGeneralSessionId_GetEncodedValue() {
-    UUID uuid = UUID.randomUUID();
-    SessionId id = createLocalGeneralSessionId(uuid);
+    String rawId = UUID.randomUUID().toString();
+    SessionId id = createLocalGeneralSessionId(rawId);
 
     assertThat(id.getEncodedValue())
         .isNotNull()
         .startsWith("session.general.")
-        .endsWith(uuid.toString());
+        .endsWith(rawId);
 
     SessionId id2 = createLocalGeneralSessionId(null);
 
@@ -32,12 +32,12 @@ public class GeneralSessionIdTest extends SessionsBaseComponent {
    */
   @Test
   public void testGeneralSessionId_ToString() {
-    UUID uuid = UUID.randomUUID();
-    SessionId id = createLocalGeneralSessionId(uuid);
+    String rawId = UUID.randomUUID().toString();
+    SessionId id = createLocalGeneralSessionId(rawId);
 
     assertThat(id.toString())
         .isNotNull()
-        .startsWith("GeneralSessionId(")
+        .startsWith("GeneralSessionId")
         .contains(id.getEncodedValue());
 
     SessionId id2 = createLocalGeneralSessionId(null);

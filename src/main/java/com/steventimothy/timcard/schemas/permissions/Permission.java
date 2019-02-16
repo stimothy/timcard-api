@@ -11,8 +11,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Permission {
 
-  SUPER_ADMIN("super-admin"),
-  CREATE_USER("create-user");
+  ADMIN("admin"),
+  CREATE_USER("create-user"),
+  CREATE_ADMIN_USER("create-admin-user"),
+  LOGIN("login"),
+  SUPER_ADMIN("super-admin");
 
   /**
    * The value of the permission.

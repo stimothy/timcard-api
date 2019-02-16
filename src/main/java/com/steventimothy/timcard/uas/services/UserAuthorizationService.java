@@ -1,6 +1,8 @@
 package com.steventimothy.timcard.uas.services;
 
 import com.steventimothy.timcard.schemas.ids.sessions.GeneralSessionId;
+import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
+import com.steventimothy.timcard.schemas.ids.users.UserId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,31 @@ public class UserAuthorizationService {
    * @return The general session id created.
    */
   public GeneralSessionId createGeneralSessionId() {
-    return new GeneralSessionId(UUID.randomUUID());
+    return new GeneralSessionId(UUID.randomUUID().toString());
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  public UserId getUserIdFromSessionId(SessionId sessionId) {
+//    return null;
+//  }
 }

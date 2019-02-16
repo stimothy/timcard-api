@@ -14,4 +14,13 @@ public class ForbiddenException extends RuntimeException {
   public ForbiddenException(String message) {
     super(message);
   }
+
+  /**
+   * The constructor.
+   * @param message The message as why this exception was thrown.
+   * @param throwable The throwable that caused this exception.
+   */
+  public ForbiddenException(String message, Throwable throwable) {
+    super(message, throwable);
+  }
 }

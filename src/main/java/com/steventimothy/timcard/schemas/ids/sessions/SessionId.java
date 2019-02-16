@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.steventimothy.timcard.schemas.ids.Id;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 /**
  * <h1>The SessionId Class</h1>
  * <p>This class holds the id for a Session.</p>
@@ -27,14 +25,14 @@ public abstract class SessionId implements Id {
   /**
    * The raw id of a session.
    */
-  protected UUID rawId;
+  protected String rawId;
 
 
   /**
    * The constructor that sets the sessionId.
    * @param rawId The id of the session.
    */
-  protected SessionId(UUID rawId) {
+  protected SessionId(String rawId) {
     this.rawId = rawId;
   }
 }

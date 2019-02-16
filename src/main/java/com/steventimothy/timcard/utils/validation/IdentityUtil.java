@@ -1,9 +1,12 @@
 package com.steventimothy.timcard.utils.validation;
 
+import com.steventimothy.timcard.clients.PmsClient;
 import com.steventimothy.timcard.schemas.exceptions.ForbiddenException;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.permissions.Permission;
+import com.steventimothy.timcard.schemas.permissions.Role;
 import com.steventimothy.timcard.utils.mappers.IdMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,31 +29,31 @@ public class IdentityUtil {
    * The mapper for mapping encoded values to ids.
    */
   private IdMapper idMapper;
+  /**
+   * The client used to talk to the PMS system.
+   */
+  private PmsClient pmsClient;
 
   /**
    * Validates that the encoded Session id is a valid session Id and that that
    * session Id has the given permission.
    *
    * @param encodedValue The encoded id of the session.
-   * @param permissions  The permissions that user must have.
+   * @param roles  The roles containing the permissions the user must have.
    * @return The session Id of the user if all was validated.
    * @throws UnauthorizedException Throws if the encoded value cannot be mapped to a sessionId.
    * @throws ForbiddenException    Throws if the session Id does not have the right permissions.
    */
-  public SessionId validate(String encodedValue, List<Permission> permissions) throws UnauthorizedException, ForbiddenException {
+  public SessionId validate(String encodedValue, List<Role> roles) throws UnauthorizedException, ForbiddenException {
 
     try {
       SessionId sessionId = this.idMapper.mapEncodedValueToSessionId(encodedValue);
+      this.pmsClient.checkPermissions(sessionId, roles);
 
-      if (permissions.size() == 1 && permissions.get(0).equals(Permission.CREATE_USER)) {
-        return sessionId;
-      }
-      else {
-        throw new ForbiddenException("Permission Denied");
-      }
+      return sessionId;
     }
-    catch (IllegalArgumentException ex) {
-      throw new UnauthorizedException("Unknown Id");
+    catch (InvalidDataException ex) {
+      throw new UnauthorizedException("Unknown Id", ex);
     }
   }
 }

@@ -14,4 +14,13 @@ public class InvalidDataException extends RuntimeException {
   public InvalidDataException(String message) {
     super(message);
   }
+
+  /**
+   * The constructor.
+   * @param message The message as why this exception was thrown.
+   * @param throwable The throwable that caused this exception.
+   */
+  public InvalidDataException(String message, Throwable throwable) {
+    super(message, throwable);
+  }
 }

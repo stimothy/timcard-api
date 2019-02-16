@@ -1,5 +1,6 @@
 package com.steventimothy.timcard.utils.validation;
 
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.users.User;
 import com.steventimothy.timcard.utils.mappers.IdMapper;
@@ -55,11 +56,11 @@ public class UserUtil {
    */
   private boolean hasValidCreationUserId(UserId userId) {
     try {
-      return (userId != null &&
+      return (userId == null || (userId != null &&
           (userId.getEncodedValue() == null ||
-              hasValidTestId(idMapper.mapUserIdToRawId(userId))));
+              hasValidTestId(idMapper.mapUserIdToRawId(userId)))));
     }
-    catch (IllegalArgumentException ex) {
+    catch (InvalidDataException ex) {
       return false;
     }
   }
@@ -70,8 +71,8 @@ public class UserUtil {
    * @param rawId The raw Id of the userId.
    * @return true if it is a valid test id, false otherwise.
    */
-  private boolean hasValidTestId(Long rawId) {
-    return (rawId > 0 && rawId < 101);
+  private boolean hasValidTestId(String rawId) {
+    return (rawId.charAt(0) == 'T');
   }
 
   /**

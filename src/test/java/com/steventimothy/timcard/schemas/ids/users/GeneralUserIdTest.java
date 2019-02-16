@@ -11,13 +11,13 @@ public class GeneralUserIdTest extends UsersBaseComponent {
    */
   @Test
   public void testGeneralUserId_GetEncodedValue() {
-    Long rawId = 4L;
+    String rawId = "T-TTT";
     UserId id = createLocalGeneralUserId(rawId);
 
     assertThat(id.getEncodedValue())
         .isNotNull()
         .startsWith("user.general.")
-        .endsWith(rawId.toString());
+        .endsWith(rawId);
 
     UserId id2 = createLocalGeneralUserId(null);
 
@@ -30,7 +30,7 @@ public class GeneralUserIdTest extends UsersBaseComponent {
    */
   @Test
   public void testGeneralUserId_ToString() {
-    Long rawId = 4L;
+    String rawId = "T-TTT";
     UserId id = createLocalGeneralUserId(rawId);
 
     assertThat(id.toString())

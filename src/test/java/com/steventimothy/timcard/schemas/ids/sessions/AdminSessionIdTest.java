@@ -13,13 +13,13 @@ public class AdminSessionIdTest extends SessionsBaseComponent {
    */
   @Test
   public void testAdminSessionId_GetEncodedValue() {
-    UUID uuid = UUID.randomUUID();
-    SessionId id = createLocalAdminSessionId(uuid);
+    String rawId = UUID.randomUUID().toString();
+    SessionId id = createLocalAdminSessionId(rawId);
 
     assertThat(id.getEncodedValue())
         .isNotNull()
         .startsWith("session.admin.")
-        .endsWith(uuid.toString());
+        .endsWith(rawId);
 
     SessionId id2 = createLocalAdminSessionId(null);
 
@@ -32,8 +32,8 @@ public class AdminSessionIdTest extends SessionsBaseComponent {
    */
   @Test
   public void testAdminSessionId_ToString() {
-    UUID uuid = UUID.randomUUID();
-    SessionId id = createLocalAdminSessionId(uuid);
+    String rawId = UUID.randomUUID().toString();
+    SessionId id = createLocalAdminSessionId(rawId);
 
     assertThat(id.toString())
         .isNotNull()

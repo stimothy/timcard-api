@@ -1,6 +1,5 @@
 package com.steventimothy.timcard.utils.mappers;
 
-import com.steventimothy.timcard.schemas.exceptions.DatabaseConflictException;
 import com.steventimothy.timcard.schemas.exceptions.ForbiddenException;
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
@@ -35,15 +34,6 @@ public class ExceptionMapperTest extends MappersBaseComponent {
   public void testForbiddenException() {
     ResponseEntity responseEntity = mapExceptionToResponse(new ForbiddenException("Forbidden."));
     assertStatus(responseEntity, HttpStatus.FORBIDDEN);
-  }
-
-  /**
-   * Tests that a 409 is returned.
-   */
-  @Test
-  public void testDatabaseConflictException() {
-    ResponseEntity responseEntity = mapExceptionToResponse(new DatabaseConflictException("Conflict."));
-    assertStatus(responseEntity, HttpStatus.CONFLICT);
   }
 
   /**
