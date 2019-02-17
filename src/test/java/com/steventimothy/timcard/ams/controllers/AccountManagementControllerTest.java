@@ -63,7 +63,7 @@ public class AccountManagementControllerTest extends ControllersBaseComponent {
     user.email(user.email().toLowerCase());
     user.password(hashPassword(user.password(), getSalt(user.username())));
 
-    ResponseEntity responseEntity = this.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getAmsHost())
+    ResponseEntity responseEntity = super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getAmsHost())
         .build().toUri())
         .header(HttpHeaders.AUTHORIZATION, "MyBadSessionId")
         .accept(MediaType.APPLICATION_JSON)
