@@ -35,8 +35,8 @@ public class UserAuthorizationController {
   public ResponseEntity getGeneralSessionId() {
     SessionId sessionId = this.userAuthorizationService.createGeneralSessionId();
 
-    log.info("[200] GET: /uas - Response: body={}", sessionId.getEncodedValue());
-    return ResponseEntity.ok(sessionId.getEncodedValue());
+    log.info("[200] GET: /uas - Response: body={}", sessionId);
+    return ResponseEntity.ok(sessionId);
   }
 
 

@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ServicesBaseComponent extends AmsBaseComponent {
 
-  /**
-   * The service used for the logic of AMS calls.
-   */
-  @Autowired
-  protected AccountManagementService accountManagementService;
+//  /**
+//   * The service used for the logic of AMS calls.
+//   */
+//  @Autowired
+//  protected AccountManagementService accountManagementService;
 }

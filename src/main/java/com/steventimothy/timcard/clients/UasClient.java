@@ -1,11 +1,16 @@
 package com.steventimothy.timcard.clients;
 
 import com.steventimothy.timcard.clients.config.ClientsConfig;
+import com.steventimothy.timcard.schemas.ids.users.UserId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * <h1>The UasClient Class</h1>
@@ -15,7 +20,22 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class UasClient extends BaseClient {
 
+  public UserId getNewUserId() {
+    return super.restTemplate.exchange(RequestEntity.get(UriComponentsBuilder.fromUriString(getUasPath() + "/admin")
+        .build().toUri())
+        .header(HttpHeaders.AUTHORIZATION, getSystemSessionId().getEncodedValue())
+        .accept(MediaType.APPLICATION_JSON)
+        .build(), UserId.class).getBody();
+  }
 
+  public void freeUserId(UserId userId) {
+    super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getUasPath() + "/admin")
+        .build().toUri())
+        .header(HttpHeaders.AUTHORIZATION, getSystemSessionId().getEncodedValue())
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(userId), String.class);
+  }
 
 
 

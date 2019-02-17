@@ -5,12 +5,12 @@ import org.junit.Test;
 
 public class UserIdTypeTest extends UsersBaseComponent {
 
-  /**
-   * Tests the lombok.
-   */
-  @Test
-  public void testUserIdType() {
-    EqualsVerifier.forClass(UserIdType.class)
-        .verify();
-  }
+//  /**
+//   * Tests the lombok.
+//   */
+//  @Test
+//  public void testUserIdType() {
+//    EqualsVerifier.forClass(UserIdType.class)
+//        .verify();
+//  }
 }

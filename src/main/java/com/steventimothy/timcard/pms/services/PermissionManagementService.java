@@ -1,6 +1,11 @@
 package com.steventimothy.timcard.pms.services;
 
 import com.steventimothy.timcard.repository.timcard.permissions.PermissionsDataService;
+import com.steventimothy.timcard.repository.timcard.sessions.SessionsDataService;
+import com.steventimothy.timcard.repository.timcard.user_roles.UserRolesDataService;
+import com.steventimothy.timcard.schemas.exceptions.ForbiddenException;
+import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
+import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.permissions.Permission;
 import com.steventimothy.timcard.schemas.permissions.Role;
 import lombok.AllArgsConstructor;
@@ -9,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <h1>The PermissionManagementService Class</h1>
@@ -23,35 +29,53 @@ public class PermissionManagementService {
    * The data service layer for the permissions data table.
    */
   private PermissionsDataService permissionsDataService;
+  /**
+   * The data service layer for the sessions data table.
+   */
+  private SessionsDataService sessionsDataService;
+  private UserRolesDataService userRolesDataService;
 
   /**
    * Checks that a user has the appropriate permissions pertaining to the list of roles
    * passed in.
-   * @param session The session id of the user to check for permissions.
-   * @param roles The list of roles the user needs.
+   *
+   * @param sessionId   The session id of the user to check for permissions.
+   * @param permissions The list of permissions the user needs.
    */
-  public void checkPermissions(String session, List<Role> roles) {
-    List<Permission> neededPermissions = permissionsDataService.getPermissionsMatchingRoles(roles);
+  public void checkPermissions(SessionId sessionId, List<Permission> permissions) {
+    permissions = permissions.stream()
+        .filter(this::isCheckablePermission)
+        .collect(Collectors.toList());
 
-    throw new UnsupportedOperationException("checkPermissions not implemented yet.");
+    if (!permissions.isEmpty()) {
+      UserId userId = getUserIdFromSession(sessionId);
+
+      if (!permissionsDataService.getUserPermissions(userId).containsAll(permissions)) {
+        throw new ForbiddenException("Permission Denied.");
+      }
+    }
+  }
+
+  public void addRole(UserId userId, Role role) {
+    this.userRolesDataService.addRole(userId, role);
+  }
+
+  private boolean isCheckablePermission(Permission permission) {
+    return (!Permission.CREATE_USER.equals(permission) && !Permission.LOGIN.equals(permission));
+  }
+
+  /**
+   * Gets the user Id from the session.
+   *
+   * @param sessionId The session id of the userId wanted.
+   * @return The user id matching the session id.
+   */
+  private UserId getUserIdFromSession(SessionId sessionId) {
+    return sessionsDataService.getUserId(sessionId);
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//  List<Permission> neededPermissions = permissionsDataService.getPermissionsMatchingRoles(roles);
 
 
 //    if (!neededPermissions.isEmpty()) {

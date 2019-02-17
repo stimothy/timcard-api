@@ -3,6 +3,8 @@ package com.steventimothy.timcard.clients;
 import com.steventimothy.timcard.clients.config.ClientsConfig;
 import com.steventimothy.timcard.schemas.exceptions.ForbiddenException;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
+import com.steventimothy.timcard.schemas.ids.users.UserId;
+import com.steventimothy.timcard.schemas.permissions.Permission;
 import com.steventimothy.timcard.schemas.permissions.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +32,17 @@ public class PmsClient extends BaseClient {
    * Checks to see if a user has permission.
    *
    * @param sessionId   The sessionId of the user.
-   * @param roles The list of roles pertaining to the permissions the user needs.
+   * @param permissions The permissions the user needs.
    * @throws ForbiddenException throws if the user does not have the correct permissions.
    */
-  public void checkPermissions(SessionId sessionId, List<Role> roles) throws ForbiddenException {
+  public void checkPermissions(SessionId sessionId, List<Permission> permissions) throws ForbiddenException {
     try {
       super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getPmsPath() + "/admin/" + sessionId.getEncodedValue())
           .build().toUri())
           .header(HttpHeaders.AUTHORIZATION, getSystemSessionId().getEncodedValue())
           .accept(MediaType.APPLICATION_JSON)
           .contentType(MediaType.APPLICATION_JSON)
-          .body(roles), String.class);
+          .body(permissions), String.class);
     }
     catch (HttpClientErrorException ex) {
       if (HttpStatus.FORBIDDEN.equals(ex.getStatusCode())) {
@@ -50,6 +52,15 @@ public class PmsClient extends BaseClient {
         throw ex;
       }
     }
+  }
+
+  public void addRole(UserId userId, Role role) {
+    super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getPmsPath() + "/admin/roles/" + userId.getEncodedValue())
+        .build().toUri())
+        .header(HttpHeaders.AUTHORIZATION, getSystemSessionId().getEncodedValue())
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(role), String.class);
   }
 
 

@@ -26,14 +26,31 @@ public class RolePermissionsDataService {
    */
   private RolePermissionsDbService rolePermissionsDbService;
 
-  /**
-   * Gets the permissions that are linked to the role id.
-   * @param roleId The id of the role.
-   * @return The permissions that are linked to the role.
-   */
-  public List<Long> getPermissionsByRoleId(Long roleId) {
+  public List<Long> getPermissionIds(Long roleId) {
     return rolePermissionsDbService.getAllByRoleId(roleId).stream()
         .map(DataRolePermission::permission_id)
         .collect(Collectors.toList());
   }
+
+
+
+
+
+
+
+
+
+
+
+
+//  /**
+//   * Gets the permissions that are linked to the role id.
+//   * @param roleId The id of the role.
+//   * @return The permissions that are linked to the role.
+//   */
+//  public List<Long> getPermissionsByRoleId(Long roleId) {
+//    return rolePermissionsDbService.getAllByRoleId(roleId).stream()
+//        .map(DataRolePermission::permission_id)
+//        .collect(Collectors.toList());
+//  }
 }

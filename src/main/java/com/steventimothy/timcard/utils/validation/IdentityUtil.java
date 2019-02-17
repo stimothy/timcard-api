@@ -39,21 +39,21 @@ public class IdentityUtil {
    * session Id has the given permission.
    *
    * @param encodedValue The encoded id of the session.
-   * @param roles  The roles containing the permissions the user must have.
+   * @param permissions  The permissions the user must have.
    * @return The session Id of the user if all was validated.
    * @throws UnauthorizedException Throws if the encoded value cannot be mapped to a sessionId.
    * @throws ForbiddenException    Throws if the session Id does not have the right permissions.
    */
-  public SessionId validate(String encodedValue, List<Role> roles) throws UnauthorizedException, ForbiddenException {
+  public SessionId validateUserPermissions(String encodedValue, List<Permission> permissions) throws UnauthorizedException, ForbiddenException {
 
     try {
       SessionId sessionId = this.idMapper.mapEncodedValueToSessionId(encodedValue);
-      this.pmsClient.checkPermissions(sessionId, roles);
+      this.pmsClient.checkPermissions(sessionId, permissions);
 
       return sessionId;
     }
     catch (InvalidDataException ex) {
-      throw new UnauthorizedException("Unknown Id", ex);
+      throw new UnauthorizedException("Unauthorized", ex);
     }
   }
 }

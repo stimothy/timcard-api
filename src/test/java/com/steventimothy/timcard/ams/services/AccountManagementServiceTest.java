@@ -1,13 +1,5 @@
 package com.steventimothy.timcard.ams.services;
 
-import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
-import com.steventimothy.timcard.schemas.ids.users.UserId;
-import com.steventimothy.timcard.schemas.users.User;
-import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-
 public class AccountManagementServiceTest extends ServicesBaseComponent {
 
 //  /**

@@ -2,12 +2,17 @@ package com.steventimothy.timcard.repository.timcard.users;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import com.steventimothy.timcard.repository.config.DbConfig;
+import com.steventimothy.timcard.repository.schemas.DataUser;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.users.config.UsersDbConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * <h1>The UsersDbService Class</h1>
@@ -22,7 +27,27 @@ class UsersDbService extends TimcardDbService {
    */
   private UsersDbConfig dbConfig;
 
+  void insert(DataUser dataUser) {
+    Connection connection = openConnection();
 
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + dbConfig.getTableName() + " (user_id, username, email, password, salt) VALUES(?, ?, ?, ?, ?)");
+      preparedStatement.setString(1, dataUser.user_id());
+      preparedStatement.setString(2, dataUser.username());
+      preparedStatement.setString(3, dataUser.email());
+      preparedStatement.setString(4, dataUser.password());
+      preparedStatement.setString(5, dataUser.salt());
+
+      //Execute the statement
+      preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new UnsupportedOperationException("not supported yet.");
+    }
+
+    //Close the connection.
+    closeConnection(connection);
+  }
 
 
 

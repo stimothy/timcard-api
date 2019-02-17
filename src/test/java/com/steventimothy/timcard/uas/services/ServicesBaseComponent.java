@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ServicesBaseComponent extends UasBaseComponent {
 
-  /**
-   * the service class for the UAS system.
-   */
-  @Autowired
-  protected UserAuthorizationService userAuthorizationService;
+//  /**
+//   * the service class for the UAS system.
+//   */
+//  @Autowired
+//  protected UserAuthorizationService userAuthorizationService;
 }

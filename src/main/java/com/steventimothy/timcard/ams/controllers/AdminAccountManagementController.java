@@ -45,7 +45,7 @@ public class AdminAccountManagementController {
 
   /**
    * Creates an admin user in the database.
-   * Needed Roles: SUPER_ADMIN
+   * Needed Permissions: SUPER_ADMIN
    *
    * @param authorizationHeader The authorization sessionId.
    * @param user                The user they want to create.
@@ -55,7 +55,7 @@ public class AdminAccountManagementController {
   public ResponseEntity createAdminUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
                                         @RequestBody User user) {
     try {
-      SessionId sessionId = this.identityUtil.validate(authorizationHeader, getCreateAdminUserRoles());
+      SessionId sessionId = this.identityUtil.validateUserPermissions(authorizationHeader, getCreateAdminUserPermissions());
 
       UserId userId = this.accountManagementService.createUser(user, UserIdType.ADMIN);
 
@@ -71,7 +71,7 @@ public class AdminAccountManagementController {
    * Gets the roles needed to create an admin user.
    * @return A list of roles associated with creating an admin user.
    */
-  private List<Role> getCreateAdminUserRoles() {
-    return Collections.singletonList(Role.SUPER_ADMIN);
+  private List<Permission> getCreateAdminUserPermissions() {
+    return Collections.singletonList(Permission.CREATE_ADMIN_USER);
   }
 }
