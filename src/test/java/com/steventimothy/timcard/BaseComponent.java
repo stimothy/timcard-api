@@ -165,6 +165,7 @@ public abstract class BaseComponent {
   protected ResponseEntity<UserId> requestCreateUser(User user, SessionId sessionId) {
     user.email(user.email().toLowerCase());
     user.password(hashPassword(user.password(), getSalt(user.username())));
+    //TODO: Delete user before creating it.
 
     return this.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getAmsHost())
         .build().toUri())
