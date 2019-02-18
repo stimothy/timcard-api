@@ -21,7 +21,7 @@ import java.sql.SQLException;
  */
 @Slf4j
 @Component
-public class SessionsDbService extends TimcardDbService {
+class SessionsDbService extends TimcardDbService {
 
   /**
    * The configurations for the role_permissions table.
@@ -84,10 +84,10 @@ public class SessionsDbService extends TimcardDbService {
    * @param dbConfig                The dbms config.
    * @param mysqlDataSource         The datasource object for dbms.
    * @param timcardDbConfig         The timcard db config.
-   * @param rolePermissionsDbConfig The users table config.
+   * @param sessionsDbConfig The sessions table config.
    */
   @Autowired
-  public SessionsDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, SessionsDbConfig sessionsDbConfig, MysqlDataSource mysqlDataSource) {
+  SessionsDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, SessionsDbConfig sessionsDbConfig, MysqlDataSource mysqlDataSource) {
     super(dbConfig, timcardDbConfig, mysqlDataSource);
     this.dbConfig = sessionsDbConfig;
   }

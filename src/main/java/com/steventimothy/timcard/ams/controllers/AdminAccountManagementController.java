@@ -58,7 +58,7 @@ public class AdminAccountManagementController {
 
       UserId userId = this.accountManagementService.createUser(user, UserIdType.ADMIN);
 
-      log.info("[200] POST: /ams - sessionId={} - Response: userId={}", sessionId, userId);
+      log.info("[200] POST: /ams/admin - sessionId={} - Response: userId={}", sessionId, userId);
       return ResponseEntity.ok(userId.getEncodedValue());
     }
     catch (Exception ex) {

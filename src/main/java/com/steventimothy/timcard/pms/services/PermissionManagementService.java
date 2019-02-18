@@ -33,6 +33,9 @@ public class PermissionManagementService {
    * The data service layer for the sessions data table.
    */
   private SessionsDataService sessionsDataService;
+  /**
+   * The data service layer for the user_roles data table.
+   */
   private UserRolesDataService userRolesDataService;
 
   /**
@@ -56,10 +59,20 @@ public class PermissionManagementService {
     }
   }
 
+  /**
+   * Adds a role to a user.
+   * @param userId The user id of the user to add a role to.
+   * @param role The role to add to the user.
+   */
   public void addRole(UserId userId, Role role) {
     this.userRolesDataService.addRole(userId, role);
   }
 
+  /**
+   * Checks to see if it is a permission that needs a database lookup.
+   * @param permission The permission to check.
+   * @return True if the permission needs database lookups.
+   */
   private boolean isCheckablePermission(Permission permission) {
     return (!Permission.PUBLIC.equals(permission));
   }

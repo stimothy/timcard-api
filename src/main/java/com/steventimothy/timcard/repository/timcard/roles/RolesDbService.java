@@ -21,7 +21,7 @@ import java.sql.SQLException;
  */
 @Slf4j
 @Component
-public class RolesDbService extends TimcardDbService {
+class RolesDbService extends TimcardDbService {
 
   /**
    * The config for the roles table.

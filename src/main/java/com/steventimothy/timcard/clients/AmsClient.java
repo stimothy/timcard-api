@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * <h1>The PmsClient Class</h1>
- * <p>This class holds the calls to the PMS endpoints.</p>
+ * <h1>The AmsClient Class</h1>
+ * <p>This class holds the calls to the AMS endpoints.</p>
  */
 @Slf4j
 @Component

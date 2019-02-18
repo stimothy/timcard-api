@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class RolePermissionsDbService extends TimcardDbService {
+class RolePermissionsDbService extends TimcardDbService {
 
   /**
    * The configurations for the role_permissions table.
@@ -75,10 +75,10 @@ public class RolePermissionsDbService extends TimcardDbService {
    * @param dbConfig                The dbms config.
    * @param mysqlDataSource         The datasource object for dbms.
    * @param timcardDbConfig         The timcard db config.
-   * @param rolePermissionsDbConfig The users table config.
+   * @param rolePermissionsDbConfig The role_permissions table config.
    */
   @Autowired
-  public RolePermissionsDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, RolePermissionsDbConfig rolePermissionsDbConfig, MysqlDataSource mysqlDataSource) {
+  RolePermissionsDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, RolePermissionsDbConfig rolePermissionsDbConfig, MysqlDataSource mysqlDataSource) {
     super(dbConfig, timcardDbConfig, mysqlDataSource);
     this.dbConfig = rolePermissionsDbConfig;
   }

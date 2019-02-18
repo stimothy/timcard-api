@@ -23,13 +23,18 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class UserRolesDbService extends TimcardDbService {
+class UserRolesDbService extends TimcardDbService {
 
   /**
    * The configurations for the role_permissions table.
    */
   private UserRolesDbConfig dbConfig;
 
+  /**
+   * Inserts a record that links a user to a role.
+   * @param user_id The user id of the user.
+   * @param role_id The role id of the role.
+   */
   void insert(String user_id, Long role_id) {
     Connection connection = openConnection();
 
@@ -47,6 +52,11 @@ public class UserRolesDbService extends TimcardDbService {
     closeConnection(connection);
   }
 
+  /**
+   * Gets all the roles linked to a user.
+   * @param user_id The user id of the user.
+   * @return The roles linked to the user.
+   */
   List<DataUserRole> getAll(String user_id) {
     List<DataUserRole> dataUserRoles = new ArrayList<>();
 
@@ -89,7 +99,7 @@ public class UserRolesDbService extends TimcardDbService {
    * @param rolePermissionsDbConfig The users table config.
    */
   @Autowired
-  public UserRolesDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, UserRolesDbConfig userRolesDbConfig, MysqlDataSource mysqlDataSource) {
+  UserRolesDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, UserRolesDbConfig userRolesDbConfig, MysqlDataSource mysqlDataSource) {
     super(dbConfig, timcardDbConfig, mysqlDataSource);
     this.dbConfig = userRolesDbConfig;
   }

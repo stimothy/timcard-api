@@ -21,7 +21,7 @@ import java.sql.SQLException;
  */
 @Slf4j
 @Component
-public class PermissionsDbService extends TimcardDbService {
+class PermissionsDbService extends TimcardDbService {
 
   /**
    * The config for the permissions table.

@@ -27,17 +27,30 @@ import java.util.Base64;
 @Component
 public class UsersDataService {
 
+  /**
+   * The utility that maps users and data users.
+   */
   private UserMapper userMapper;
+  /**
+   * That database layer that is used to talk to the users table.
+   */
   private UsersDbService usersDbService;
 
+  /**
+   * Creates a user in the data.
+   * @param user The user to create.
+   */
   public void createUser(User user) {
     DataUser dataUser = userMapper.map(user);
     dataUser.salt(getSalt());
     dataUser.password(encryptPassword(dataUser.password(), dataUser.salt()));
     usersDbService.insert(dataUser);
-
   }
 
+  /**
+   * Gets a salt used to hash the password.
+   * @return The salt used to hash the password.
+   */
   private String getSalt() {
     SecureRandom random = new SecureRandom();
     byte[] salt = new byte[64];
@@ -45,6 +58,12 @@ public class UsersDataService {
     return Base64.getEncoder().encodeToString(salt);
   }
 
+  /**
+   * Hashes the password to store in the database.
+   * @param password The password to hash.
+   * @param salt The salt used to hash the password.
+   * @return The hashed password.
+   */
   private String encryptPassword(String password, String salt) {
     byte[] salter = Base64.getDecoder().decode(salt);
 

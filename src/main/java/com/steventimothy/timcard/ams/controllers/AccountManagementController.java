@@ -44,7 +44,7 @@ public class AccountManagementController {
 
   /**
    * Creates an admin user in the database.
-   * Needed Permissions: CREATE_USER
+   * Needed Permissions: PUBLIC
    *
    * @param authorizationHeader The authorization sessionId.
    * @param user                The user they want to create.

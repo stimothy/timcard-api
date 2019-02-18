@@ -59,7 +59,7 @@ public class AdminPermissionsManagementController {
       this.permissionManagementService.checkPermissions(authorizationSession, Collections.singletonList(Permission.ADMIN));
       this.permissionManagementService.checkPermissions(sessionId, permissions);
 
-      log.info("[200] POST: /pms/{} - sessionId={} - Response: OK", session, authorizationSession);
+      log.info("[200] POST: /pms/admin/{} - sessionId={} - Response: OK", session, authorizationSession);
       return ResponseEntity.ok().build();
     }
     catch (Exception ex) {
@@ -68,11 +68,11 @@ public class AdminPermissionsManagementController {
   }
 
   /**
-   * Checks to see if the user has the correct permissions.
+   * Adds a role to the user.
    *
    * @param authorizationHeader The authorization sessionId.
-   * @param session             The sessionId of the user.
-   * @param permissions         The permissions the user needs.
+   * @param userId             The user id of the user.
+   * @param role         The role to add to the user.
    * @return Ok if they do.
    */
   @PostMapping(value = "/roles/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,11 +85,11 @@ public class AdminPermissionsManagementController {
 
       this.permissionManagementService.addRole(idMapper.mapEncodedValueToUserId(userId), role);
 
-      log.info("[200] POST: /pms/{} - sessionId={} - Response: OK", sessionId.getEncodedValue(), sessionId);
+      log.info("[200] POST: /pms/admin/roles/{} - sessionId={} - Response: OK", userId, sessionId);
       return ResponseEntity.ok().build();
     }
     catch (Exception ex) {
-      return this.exceptionMapper.mapExceptionToResponse("POST", "/pms/admin/roles/userId" + authorizationHeader, authorizationHeader, ex);
+      return this.exceptionMapper.mapExceptionToResponse("POST", "/pms/admin/roles/" + userId, authorizationHeader, ex);
     }
   }
 }

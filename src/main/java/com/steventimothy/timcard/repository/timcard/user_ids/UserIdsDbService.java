@@ -21,13 +21,17 @@ import java.sql.SQLException;
  */
 @Slf4j
 @Component
-public class UserIdsDbService extends TimcardDbService {
+class UserIdsDbService extends TimcardDbService {
 
   /**
    * The configurations for the role_permissions table.
    */
   private UserIdsDbConfig dbConfig;
 
+  /**
+   * Frees up a user id in the database.
+   * @param user_id The user id to free.
+   */
   void update(String user_id) {
     Connection connection = openConnection();
 
@@ -42,6 +46,10 @@ public class UserIdsDbService extends TimcardDbService {
     }
   }
 
+  /**
+   * Gets a new user id from the database.
+   * @return The new user retrieved from the database.
+   */
   synchronized DataUserId get() {
     DataUserId dataUserId = null;
 
@@ -74,6 +82,11 @@ public class UserIdsDbService extends TimcardDbService {
     return dataUserId;
   }
 
+  /**
+   * Sets a new user id to used.
+   * @param id The id to set to used.
+   * @param connection The connection used to talk to the database.
+   */
   private void setUsed(Long id, Connection connection) {
     try {
       PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = TRUE WHERE id = ?");
@@ -96,10 +109,10 @@ public class UserIdsDbService extends TimcardDbService {
    * @param dbConfig        The dbms config.
    * @param mysqlDataSource The datasource object for dbms.
    * @param timcardDbConfig The timcard db config.
-   * @param userIdsDbConfig The users table config.
+   * @param userIdsDbConfig The user ids table config.
    */
   @Autowired
-  public UserIdsDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, UserIdsDbConfig userIdsDbConfig, MysqlDataSource mysqlDataSource) {
+  UserIdsDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, UserIdsDbConfig userIdsDbConfig, MysqlDataSource mysqlDataSource) {
     super(dbConfig, timcardDbConfig, mysqlDataSource);
     this.dbConfig = userIdsDbConfig;
   }

@@ -19,6 +19,9 @@ import java.util.UUID;
 @Component
 public class UserAuthorizationService {
 
+  /**
+   * The data service layer used to talk to the user_ids data table.
+   */
   private UserIdsDataService userIdsDataService;
 
   /**
@@ -30,10 +33,18 @@ public class UserAuthorizationService {
     return new GeneralSessionId(UUID.randomUUID().toString());
   }
 
+  /**
+   * Gets a new user id from the database.
+   * @return The new user id retrieved from the database.
+   */
   public UserId getNewUserId() {
     return userIdsDataService.getNewUserId();
   }
 
+  /**
+   * Frees up a user id in the database.
+   * @param userId The user id to free up.
+   */
   public void freeUserId(UserId userId) {
     this.userIdsDataService.freeUserId(userId);
   }

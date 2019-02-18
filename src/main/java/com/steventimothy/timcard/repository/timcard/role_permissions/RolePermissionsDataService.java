@@ -24,6 +24,11 @@ public class RolePermissionsDataService {
    */
   private RolePermissionsDbService rolePermissionsDbService;
 
+  /**
+   * Gets the permission ids linked to a role.
+   * @param roleId The role id of the role to get permissions.
+   * @return The list of permissions linked to the role.
+   */
   public List<Long> getPermissionIds(Long roleId) {
     return rolePermissionsDbService.getAllByRoleId(roleId).stream()
         .map(DataRolePermission::permission_id)

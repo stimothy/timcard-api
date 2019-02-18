@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionMapper {
 
+  /**
+   * Maps a data permission to a permission.
+   * @param dataPermission The data permission to map.
+   * @return The permission that the data permission mapped to.
+   */
   public Permission map(DataPermission dataPermission) {
     switch (dataPermission.name()) {
       case "admin":

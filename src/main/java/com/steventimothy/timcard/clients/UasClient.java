@@ -20,6 +20,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class UasClient extends BaseClient {
 
+  /**
+   * Get a new user id for a user.
+   * @return The new user id of the user.
+   */
   public UserId getNewUserId() {
     return super.restTemplate.exchange(RequestEntity.get(UriComponentsBuilder.fromUriString(getUasPath() + "/admin")
         .build().toUri())
@@ -28,6 +32,10 @@ public class UasClient extends BaseClient {
         .build(), UserId.class).getBody();
   }
 
+  /**
+   * Free a user id to be able to use it again.
+   * @param userId The user id to free.
+   */
   public void freeUserId(UserId userId) {
     super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getUasPath() + "/admin")
         .build().toUri())

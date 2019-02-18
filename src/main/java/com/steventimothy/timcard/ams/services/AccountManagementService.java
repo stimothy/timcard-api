@@ -25,15 +25,24 @@ import org.springframework.stereotype.Component;
 public class AccountManagementService {
 
   /**
+   * The data service layer for the users database table.
+   */
+  private UsersDataService usersDataService;
+  /**
    * The client used to talk to the UAS system.
    */
   private UasClient uasClient;
+  /**
+   * The client used to talk to the PMS system.
+   */
   private PmsClient pmsClient;
   /**
    * The utility to verify the user has valid data.
    */
   private UserUtil userUtil;
-  private UsersDataService usersDataService;
+  /**
+   * the utility that maps ids.
+   */
   private IdMapper idMapper;
 
   /**
@@ -48,6 +57,7 @@ public class AccountManagementService {
     if (user.userId() == null) {
       user.userId(uasClient.getNewUserId());
     }
+
     try {
       usersDataService.createUser(user);
 

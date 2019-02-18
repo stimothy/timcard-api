@@ -19,14 +19,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserIdsDataService {
 
+  /**
+   * The database layer used to talk to the user_ids table.
+   */
   private UserIdsDbService userIdsDbService;
+  /**
+   * The utility that maps ids.
+   */
   private IdMapper idMapper;
 
+  /**
+   * Gets a new user id from the database.
+   * @return The new user id.
+   */
   public UserId getNewUserId() {
     DataUserId dataUserId = userIdsDbService.get();
     return new GeneralUserId(dataUserId.user_id());
   }
 
+  /**
+   * Frees up a user id in the database.
+   * @param userId The user id to free up.
+   */
   public void freeUserId(UserId userId) {
     this.userIdsDbService.update(idMapper.mapUserIdToRawId(userId));
   }

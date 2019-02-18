@@ -23,16 +23,35 @@ import java.util.stream.Collectors;
 @Component
 public class UserRolesDataService {
 
+  /**
+   * The database layer to talk to the user_roles table.
+   */
   private UserRolesDbService userRolesDbService;
+  /**
+   * The utility used for mapping ids.
+   */
   private IdMapper idMapper;
+  /**
+   * The data service layer to talk to the roles data table.
+   */
   private RolesDataService rolesDataService;
 
+  /**
+   * Gets the role ids of linked to the user.
+   * @param userId The user id of the user.
+   * @return The roles ids linked to the user.
+   */
   public List<Long> getRoleIds(UserId userId) {
     return userRolesDbService.getAll(idMapper.mapUserIdToRawId(userId)).stream()
         .map(DataUserRole::role_id)
         .collect(Collectors.toList());
   }
 
+  /**
+   * Adds a role to a user.
+   * @param userId The user id of the user to add the role to.
+   * @param role The role to add to the user.
+   */
   public void addRole(UserId userId, Role role) {
     Long role_id = rolesDataService.getRoleId(role.getValue());
     userRolesDbService.insert(idMapper.mapUserIdToRawId(userId), role_id);

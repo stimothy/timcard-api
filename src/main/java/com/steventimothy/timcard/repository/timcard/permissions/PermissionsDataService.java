@@ -28,10 +28,24 @@ public class PermissionsDataService {
    * The database layer to talk to the permissions table.
    */
   private PermissionsDbService permissionsDbService;
+  /**
+   * The data service layer to talk to the user_roles data table.
+   */
   private UserRolesDataService userRolesDataService;
+  /**
+   * The data service layer to talk to the role_permissions data table.
+   */
   private RolePermissionsDataService rolePermissionsDataService;
+  /**
+   * Utility to map permissions and names.
+   */
   private PermissionMapper permissionMapper;
 
+  /**
+   * Gets a list of permissions that a user has.
+   * @param userId The user id to get permissions.
+   * @return The list of permissions the user has.
+   */
   public List<Permission> getUserPermissions(UserId userId) {
     List<Long> roleIds = userRolesDataService.getRoleIds(userId);
 

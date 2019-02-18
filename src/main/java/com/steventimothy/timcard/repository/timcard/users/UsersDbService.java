@@ -27,6 +27,10 @@ class UsersDbService extends TimcardDbService {
    */
   private UsersDbConfig dbConfig;
 
+  /**
+   * Inserts a user into the database.
+   * @param dataUser The data user to insert.
+   */
   void insert(DataUser dataUser) {
     Connection connection = openConnection();
 

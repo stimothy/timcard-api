@@ -54,6 +54,12 @@ public class PmsClient extends BaseClient {
     }
   }
 
+  /**
+   * Adds a role to the user.
+   *
+   * @param userId The user id of the user.
+   * @param role   The role to add.
+   */
   public void addRole(UserId userId, Role role) {
     super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getPmsPath() + "/admin/roles/" + userId.getEncodedValue())
         .build().toUri())
