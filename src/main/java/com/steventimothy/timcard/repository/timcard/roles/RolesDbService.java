@@ -30,6 +30,7 @@ public class RolesDbService extends TimcardDbService {
 
   /**
    * Gets the data role by name.
+   *
    * @param name The name of the role.
    * @return The data role that matches the name.
    */
@@ -66,9 +67,10 @@ public class RolesDbService extends TimcardDbService {
 
   /**
    * Constructor.
-   * @param dbConfig The configurations for the database system.
+   *
+   * @param dbConfig        The configurations for the database system.
    * @param timcardDbConfig The configurations for the timcard database.
-   * @param rolesDbConfig The configurations for the roles table.
+   * @param rolesDbConfig   The configurations for the roles table.
    * @param mysqlDataSource The mysql datasource used to connect to the database.
    */
   @Autowired

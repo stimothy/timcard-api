@@ -12,10 +12,9 @@ import lombok.Getter;
 public enum Permission {
 
   ADMIN("admin"),
-  CREATE_USER("create-user"),
-  CREATE_ADMIN_USER("create-admin-user"),
-  LOGIN("login"),
-  SUPER_ADMIN("super-admin");
+  PUBLIC("public"),
+  SUPER_ADMIN("super-admin"),
+  USER("user");
 
   /**
    * The value of the permission.

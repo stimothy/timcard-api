@@ -30,6 +30,7 @@ public class PermissionsDbService extends TimcardDbService {
 
   /**
    * Gets a DataPermission from the database by id.
+   *
    * @param id The id of the permission
    * @return The data permission matching the id.
    */
@@ -66,10 +67,11 @@ public class PermissionsDbService extends TimcardDbService {
 
   /**
    * The constructor.
-   * @param dbConfig The configurations for the entire database system.
-   * @param timcardDbConfig The configurations for the timcard database.
+   *
+   * @param dbConfig            The configurations for the entire database system.
+   * @param timcardDbConfig     The configurations for the timcard database.
    * @param permissionsDbConfig The configurations for the permissions table.
-   * @param mysqlDataSource The mysql data source used to communicate with the database.
+   * @param mysqlDataSource     The mysql data source used to communicate with the database.
    */
   @Autowired
   PermissionsDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, PermissionsDbConfig permissionsDbConfig, MysqlDataSource mysqlDataSource) {

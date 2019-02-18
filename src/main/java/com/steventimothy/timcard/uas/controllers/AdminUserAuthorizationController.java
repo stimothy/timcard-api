@@ -1,6 +1,5 @@
 package com.steventimothy.timcard.uas.controllers;
 
-import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.permissions.Permission;
 import com.steventimothy.timcard.uas.services.UserAuthorizationService;

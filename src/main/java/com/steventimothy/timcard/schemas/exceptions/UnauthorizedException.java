@@ -9,6 +9,7 @@ public class UnauthorizedException extends RuntimeException {
 
   /**
    * The constructor
+   *
    * @param message The message of why this exception was thrown.
    */
   public UnauthorizedException(String message) {
@@ -17,7 +18,8 @@ public class UnauthorizedException extends RuntimeException {
 
   /**
    * The constructor.
-   * @param message The message as why this exception was thrown.
+   *
+   * @param message   The message as why this exception was thrown.
    * @param throwable The throwable that caused this exception.
    */
   public UnauthorizedException(String message, Throwable throwable) {

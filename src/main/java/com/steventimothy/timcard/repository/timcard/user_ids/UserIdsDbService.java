@@ -93,9 +93,9 @@ public class UserIdsDbService extends TimcardDbService {
   /**
    * The constructor that receives the autowired components.
    *
-   * @param dbConfig                The dbms config.
-   * @param mysqlDataSource         The datasource object for dbms.
-   * @param timcardDbConfig         The timcard db config.
+   * @param dbConfig        The dbms config.
+   * @param mysqlDataSource The datasource object for dbms.
+   * @param timcardDbConfig The timcard db config.
    * @param userIdsDbConfig The users table config.
    */
   @Autowired

@@ -36,6 +36,7 @@ public class AdminUserId extends UserId {
 
   /**
    * The constructor for setting the raw id.
+   *
    * @param rawId The raw id of the user.
    */
   public AdminUserId(String rawId) {

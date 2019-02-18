@@ -7,6 +7,7 @@ import com.steventimothy.timcard.schemas.permissions.Permission;
 import com.steventimothy.timcard.schemas.users.User;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,13 +19,13 @@ public class IdentityUtilTest extends ValidationBaseComponent {
    * Tests that a user with valid permissions will be validated.
    */
   @Test
-  public void testValidateUserPermissions_Valid() {
-    User user = createLocalUser();
-    SessionId sessionId = getGeneralSessionId();
-
-    requestCreateUser(user, sessionId);
-
-    SessionId sessionId2 = super.identityUtil.validateUserPermissions(sessionId.getEncodedValue(), Collections.singletonList(Permission.CREATE_USER));
+  public void testValidateUserPermissions_Valid_General() {
+    SessionId sessionId = getSuperAdminSessionId();
+    SessionId sessionId2 = validateUserPermissions(sessionId.getEncodedValue(), Arrays.asList(
+        Permission.SUPER_ADMIN,
+        Permission.ADMIN,
+        Permission.USER)
+    );
 
     assertThat(sessionId2)
         .isEqualTo(sessionId);
@@ -35,7 +36,7 @@ public class IdentityUtilTest extends ValidationBaseComponent {
    */
   @Test(expected = UnauthorizedException.class)
   public void testValidateUserPermissions_Unauthorized() {
-    super.identityUtil.validateUserPermissions("myBadSessionId", Collections.singletonList(Permission.CREATE_USER));
+    validateUserPermissions("myBadSessionId", Collections.singletonList(Permission.PUBLIC));
   }
 
   /**
@@ -43,6 +44,6 @@ public class IdentityUtilTest extends ValidationBaseComponent {
    */
   @Test(expected = ForbiddenException.class)
   public void testValidateUserPermissions_Forbidden() {
-    fail("This test cannot be tested yet.");
+    fail("This test cannot be tested until a user can log in.");
   }
 }

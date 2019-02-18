@@ -37,9 +37,4 @@ public class UserAuthorizationService {
   public void freeUserId(UserId userId) {
     this.userIdsDataService.freeUserId(userId);
   }
-
-
-//  public UserId getUserIdFromSessionId(SessionId sessionId) {
-//    return null;
-//  }
 }

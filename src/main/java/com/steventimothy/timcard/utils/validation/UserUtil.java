@@ -1,9 +1,7 @@
 package com.steventimothy.timcard.utils.validation;
 
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
-import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.users.User;
-import com.steventimothy.timcard.utils.mappers.IdMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserUtil {
 
-  /**
-   * Maps encoded ids to raw ids.
-   */
-  private IdMapper idMapper;
   /**
    * The regex to check emails.
    */
@@ -51,6 +45,7 @@ public class UserUtil {
     validateEmail(user.email());
     validatePassword(user.password());
   }
+
   /**
    * Validates that the username has correct data.
    *

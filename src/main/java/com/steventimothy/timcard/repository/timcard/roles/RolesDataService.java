@@ -22,6 +22,7 @@ public class RolesDataService {
 
   /**
    * Gets a role id by name.
+   *
    * @param name The name of the role id.
    * @return The id of the role.
    */

@@ -30,6 +30,7 @@ public abstract class SessionId implements Id {
 
   /**
    * The constructor that sets the sessionId.
+   *
    * @param rawId The id of the session.
    */
   protected SessionId(String rawId) {

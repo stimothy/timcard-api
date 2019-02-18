@@ -5,7 +5,6 @@ import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.ids.users.UserIdType;
 import com.steventimothy.timcard.schemas.permissions.Permission;
-import com.steventimothy.timcard.schemas.permissions.Role;
 import com.steventimothy.timcard.schemas.users.User;
 import com.steventimothy.timcard.utils.mappers.ExceptionMapper;
 import com.steventimothy.timcard.utils.validation.IdentityUtil;
@@ -69,9 +68,10 @@ public class AdminAccountManagementController {
 
   /**
    * Gets the roles needed to create an admin user.
+   *
    * @return A list of roles associated with creating an admin user.
    */
   private List<Permission> getCreateAdminUserPermissions() {
-    return Collections.singletonList(Permission.CREATE_ADMIN_USER);
+    return Collections.singletonList(Permission.SUPER_ADMIN);
   }
 }

@@ -30,6 +30,7 @@ public abstract class BaseClient {
 
   /**
    * Gets the system session id.
+   *
    * @return the system session id.
    */
   protected AdminSessionId getSystemSessionId() {
@@ -65,6 +66,7 @@ public abstract class BaseClient {
 
   /**
    * Gets the port.
+   *
    * @return The port.
    */
   private String getPort() {
@@ -73,6 +75,7 @@ public abstract class BaseClient {
 
   /**
    * Gets the server address.
+   *
    * @return The address.
    */
   private String getAddress() {
@@ -81,6 +84,7 @@ public abstract class BaseClient {
 
   /**
    * Gets the server protocol
+   *
    * @return The protocol.
    */
   private String getProtocol() {
@@ -91,8 +95,8 @@ public abstract class BaseClient {
   /**
    * The constructor.
    *
-   * @param environment The environment of the system.
-   * @param restTemplate The rest caller.
+   * @param environment   The environment of the system.
+   * @param restTemplate  The rest caller.
    * @param clientsConfig The configurations for the client classes.
    */
   public BaseClient(Environment environment, RestTemplate restTemplate, ClientsConfig clientsConfig) {

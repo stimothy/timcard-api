@@ -2,15 +2,15 @@ package com.steventimothy.timcard.utils.mappers;
 
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.ids.Id;
-import com.steventimothy.timcard.schemas.ids.sessions.*;
+import com.steventimothy.timcard.schemas.ids.sessions.AdminSessionId;
+import com.steventimothy.timcard.schemas.ids.sessions.GeneralSessionId;
+import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
+import com.steventimothy.timcard.schemas.ids.sessions.UserSessionId;
 import com.steventimothy.timcard.schemas.ids.users.AdminUserId;
 import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
-import com.steventimothy.timcard.schemas.ids.users.UserIdType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 /**
  * <h1>The IdMapper Class</h1>
@@ -103,57 +103,6 @@ public class IdMapper {
     }
 
     throw new InvalidDataException("Couldn't map encodedValue to raw Id");
-  }
-
-  /**
-   * Maps a raw id to a sessionId.
-   *
-   * @param rawId         The raw id to map.
-   * @param sessionIdType The sessionId type to map to.
-   * @return The SessionId that was mapped.
-   * @throws UnsupportedOperationException Throws if the sessionIdType is unrecognizable.
-   * @throws InvalidDataException Throws if the raw id could not be mapped to a sessionId.
-   */
-  public SessionId mapRawIdToSessionId(String rawId, SessionIdType sessionIdType) throws InvalidDataException, UnsupportedOperationException {
-    if (rawId != null) {
-      switch (sessionIdType) {
-        case ADMIN:
-          return new AdminSessionId(rawId);
-        case USER:
-          return new UserSessionId(rawId);
-        case GENERAL:
-          return new GeneralSessionId(rawId);
-        default:
-          throw new UnsupportedOperationException("This class doesn't know how to map sessionIdType: " + sessionIdType.getValue());
-      }
-    }
-
-    throw new InvalidDataException("RawId cannot be null");
-  }
-
-  /**
-   * Maps a raw id to a userId.
-   *
-   * @param rawId      The raw Id of the user.
-   * @param userIdType The userId type of the user.
-   * @return The userId that was mapped to.
-   * @throws UnsupportedOperationException throws if the userId type is unknown.
-   * @throws InvalidDataException Throws if the raw Id couldn't be mapped to the userId.
-   */
-  public UserId mapRawIdToUserId(String rawId, UserIdType userIdType) throws InvalidDataException, UnsupportedOperationException {
-    if (rawId != null) {
-      switch (userIdType) {
-        case ADMIN:
-          return new AdminUserId(rawId);
-        case GENERAL:
-          return new GeneralUserId(rawId);
-        default:
-          throw new UnsupportedOperationException("This class doesn't know how to map userIdType: " + userIdType.getValue());
-      }
-    }
-    else {
-      throw new InvalidDataException("raw Id cannot be null.");
-    }
   }
 
   /**

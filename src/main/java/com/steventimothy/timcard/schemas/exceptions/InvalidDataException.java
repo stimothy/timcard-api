@@ -9,6 +9,7 @@ public class InvalidDataException extends RuntimeException {
 
   /**
    * The constructor.
+   *
    * @param message The message as why this exception was thrown.
    */
   public InvalidDataException(String message) {
@@ -17,7 +18,8 @@ public class InvalidDataException extends RuntimeException {
 
   /**
    * The constructor.
-   * @param message The message as why this exception was thrown.
+   *
+   * @param message   The message as why this exception was thrown.
    * @param throwable The throwable that caused this exception.
    */
   public InvalidDataException(String message, Throwable throwable) {

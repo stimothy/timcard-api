@@ -36,6 +36,7 @@ public class GeneralSessionId extends SessionId {
 
   /**
    * The constructor for setting the raw id.
+   *
    * @param rawId The raw id of the session.
    */
   public GeneralSessionId(String rawId) {

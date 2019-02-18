@@ -1,8 +1,6 @@
 package com.steventimothy.timcard.repository.timcard.role_permissions;
 
 import com.steventimothy.timcard.repository.schemas.DataRolePermission;
-import com.steventimothy.timcard.schemas.permissions.Permission;
-import com.steventimothy.timcard.schemas.permissions.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,26 +29,4 @@ public class RolePermissionsDataService {
         .map(DataRolePermission::permission_id)
         .collect(Collectors.toList());
   }
-
-
-
-
-
-
-
-
-
-
-
-
-//  /**
-//   * Gets the permissions that are linked to the role id.
-//   * @param roleId The id of the role.
-//   * @return The permissions that are linked to the role.
-//   */
-//  public List<Long> getPermissionsByRoleId(Long roleId) {
-//    return rolePermissionsDbService.getAllByRoleId(roleId).stream()
-//        .map(DataRolePermission::permission_id)
-//        .collect(Collectors.toList());
-//  }
 }

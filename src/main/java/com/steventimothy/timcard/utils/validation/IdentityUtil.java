@@ -6,7 +6,6 @@ import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.permissions.Permission;
-import com.steventimothy.timcard.schemas.permissions.Role;
 import com.steventimothy.timcard.utils.mappers.IdMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

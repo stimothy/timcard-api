@@ -44,9 +44,9 @@ public abstract class TimcardDbService extends DbService {
   /**
    * The constructor the set up the injections.
    *
-   * @param dbConfig          The dbms config class.
+   * @param dbConfig        The dbms config class.
    * @param timcardDbConfig The timcard db config class.
-   * @param mysqlDataSource   The datasource for connecting with a database.
+   * @param mysqlDataSource The datasource for connecting with a database.
    */
   public TimcardDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, MysqlDataSource mysqlDataSource) {
     super(dbConfig, mysqlDataSource);

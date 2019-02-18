@@ -17,38 +17,14 @@ public class PermissionMapper {
     switch (dataPermission.name()) {
       case "admin":
         return Permission.ADMIN;
-      case "create-admin-user":
-        return Permission.CREATE_ADMIN_USER;
-      case "create-user":
-        return Permission.CREATE_USER;
-      case "login":
-        return Permission.LOGIN;
+      case "public":
+        return Permission.PUBLIC;
       case "super-admin":
         return Permission.SUPER_ADMIN;
+      case "user":
+        return Permission.USER;
       default:
         throw new UnsupportedOperationException("Permission mapping not supported yet.");
     }
   }
-
-//  /**
-//   * Maps a permission name to a Permission enum.
-//   * @param name The name of the permission.
-//   * @return The Permission matching the name.
-//   */
-//  public Permission map(String name) {
-//    switch (name) {
-//      case "admin":
-//        return Permission.ADMIN;
-//      case "create-admin-user":
-//        return Permission.CREATE_ADMIN_USER;
-//      case "create-user":
-//        return Permission.CREATE_USER;
-//      case "login":
-//        return Permission.LOGIN;
-//      case "super-admin":
-//        return Permission.SUPER_ADMIN;
-//      default:
-//        throw new UnsupportedOperationException("Permission mapping not supported yet.");
-//    }
-//  }
 }

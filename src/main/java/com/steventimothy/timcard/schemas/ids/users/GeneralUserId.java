@@ -36,6 +36,7 @@ public class GeneralUserId extends UserId {
 
   /**
    * The constructor for setting the raw id.
+   *
    * @param rawId The raw id of the user.
    */
   public GeneralUserId(String rawId) {

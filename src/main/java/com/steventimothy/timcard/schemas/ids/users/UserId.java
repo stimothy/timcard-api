@@ -29,6 +29,7 @@ public abstract class UserId implements Id {
 
   /**
    * The constructor that sets the userId.
+   *
    * @param rawId The id of the user.
    */
   protected UserId(String rawId) {

@@ -36,6 +36,7 @@ public class AdminSessionId extends SessionId {
 
   /**
    * The constructor for setting the raw id.
+   *
    * @param rawId The raw id of the session.
    */
   public AdminSessionId(String rawId) {

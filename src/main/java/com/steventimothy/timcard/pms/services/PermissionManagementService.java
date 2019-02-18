@@ -61,7 +61,7 @@ public class PermissionManagementService {
   }
 
   private boolean isCheckablePermission(Permission permission) {
-    return (!Permission.CREATE_USER.equals(permission) && !Permission.LOGIN.equals(permission));
+    return (!Permission.PUBLIC.equals(permission));
   }
 
   /**
@@ -73,44 +73,4 @@ public class PermissionManagementService {
   private UserId getUserIdFromSession(SessionId sessionId) {
     return sessionsDataService.getUserId(sessionId);
   }
-
-
-//  List<Permission> neededPermissions = permissionsDataService.getPermissionsMatchingRoles(roles);
-
-
-//    if (!neededPermissions.isEmpty()) {
-//      SessionId sessionId = this.idMapper.mapEncodedValueToSessionId(session);
-//      UserId userId = this.uasClient.getUserIdFromSession(sessionId);
-//      //List<Permission> userPermissions = getUserPermissions(userId);
-//
-////      if (!userPermissions.containsAll(neededPermissions)) {
-////        throw new ForbiddenException("Permission Denied.");
-////      }
-//    }
-
-//  /**
-//   * The client that calls the UAS system.
-//   */
-//  private UasClient uasClient;
-//  /**
-//   * The utility for mapping ids.
-//   */
-//  private IdMapper idMapper;
-
-//  private List<Permission> getUserPermissions(UserId userId) {
-//    List<Role> roles = this.permissionsDataService.getUserRoles(userId);
-//    return getPermissionsMatchingRoles(roles);
-//  }
-//
-//  private List<Permission> getPermissionsMatchingRoles(List<Role> roles) {
-//    return roles.stream()
-//        .map(this::getRolePermissions)
-//        .flatMap(Collection::stream)
-//        .filter(permission -> !permission.equals(Permission.CREATE_USER) && !permission.equals(Permission.LOGIN))
-//        .collect(Collectors.toList());
-//  }
-//
-//  private List<Permission> getRolePermissions(Role role) {
-//    return permissionsDataService.getRolePermissions(role);
-//  }
 }

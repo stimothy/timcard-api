@@ -67,8 +67,8 @@ public class PmsClient extends BaseClient {
   /**
    * The Constructor.
    *
-   * @param environment The environment of the system.
-   * @param restTemplate The rest caller.
+   * @param environment   The environment of the system.
+   * @param restTemplate  The rest caller.
    * @param clientsConfig The configurations for the client classes.
    */
   @Autowired

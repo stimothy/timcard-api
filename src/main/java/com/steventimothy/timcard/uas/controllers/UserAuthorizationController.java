@@ -38,49 +38,4 @@ public class UserAuthorizationController {
     log.info("[200] GET: /uas - Response: body={}", sessionId);
     return ResponseEntity.ok(sessionId);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//  /**
-//   * The utility used to map ids.
-//   */
-//  private IdMapper idMapper;
-//  /**
-//   * The utility used to map exceptions to responses.
-//   */
-//  private ExceptionMapper exceptionMapper;
-
-//  @GetMapping(value = "/{session}", produces = MediaType.APPLICATION_JSON_VALUE)
-//  public ResponseEntity getUserIdFromSession(@PathVariable("session") String session) {
-//    try {
-//      SessionId sessionId = this.idMapper.mapEncodedValueToSessionId(session);
-//
-//      UserId userId = this.userAuthorizationService.getUserIdFromSessionId(sessionId);
-//
-//      log.info("[200] GET: /uas/{} - Response: body={}", session, sessionId.getEncodedValue());
-//      return ResponseEntity.ok(userId.getEncodedValue());
-//    }
-//    catch (Exception ex) {
-//      return this.exceptionMapper.mapExceptionToResponse("GET", "/uas/" + session, session, ex);
-//    }
-//  }
 }

@@ -1,6 +1,8 @@
 package com.steventimothy.timcard.utils.mappers;
 
 import com.steventimothy.timcard.repository.schemas.DataUser;
+import com.steventimothy.timcard.schemas.ids.users.AdminUserId;
+import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.ids.users.UserIdType;
 import com.steventimothy.timcard.schemas.users.User;
@@ -46,7 +48,18 @@ public class UserMapper {
    * @throws UnsupportedOperationException Throws if the userType is not recognizable.
    */
   public User map(DataUser dataUser, UserIdType userType) throws UnsupportedOperationException {
-    UserId userId = idMapper.mapRawIdToUserId(dataUser.user_id(), userType);
+    UserId userId;
+
+    switch (userType) {
+      case ADMIN:
+        userId = new AdminUserId(dataUser.user_id());
+        break;
+      case GENERAL:
+        userId = new GeneralUserId(dataUser.user_id());
+        break;
+      default:
+        throw new UnsupportedOperationException("Unknown userType.");
+    }
 
     return new User()
         .userId(userId)

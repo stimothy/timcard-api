@@ -41,35 +41,4 @@ public class PermissionsDataService {
         .map(permissionId -> permissionMapper.map(permissionsDbService.get(permissionId)))
         .collect(Collectors.toList());
   }
-
-
-
-
-
-
-
-
-//  /**
-//   * The database layer to talk to the roles table.
-//   */
-//  private RolesDataService rolesDataService;
-//  /**
-//   * The database layer to talk to the role_permissions table.
-//   */
-//  private RolePermissionsDataService rolePermissionsDataService;
-//  /**
-//   * The utility for mapping permission names to values.
-//   */
-//  private PermissionMapper permissionMapper;
-//
-//  public List<Permission> getPermissionsMatchingRoles(List<Role> roles) {
-//    return roles.stream()
-//        .map(role -> rolesDataService.getRoleId(role.getValue()))
-//        .filter(Objects::nonNull)
-//        .map(roleId -> rolePermissionsDataService.getPermissionsByRoleId(roleId))
-//        .flatMap(Collection::stream)
-//        .map(permissionId -> permissionsDbService.get(permissionId))
-//        .map(dataPermission -> permissionMapper.map(dataPermission.name()))
-//        .collect(Collectors.toList());
-//  }
 }

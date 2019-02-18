@@ -38,46 +38,11 @@ public class UasClient extends BaseClient {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//  public UserId getUserIdFromSession(SessionId sessionId) {
-//    try {
-//      String id = super.restTemplate.exchange(RequestEntity.get(UriComponentsBuilder.fromUriString(getUasPath() + "/" + sessionId.getEncodedValue())
-//          .build().toUri())
-//          .accept(MediaType.APPLICATION_JSON)
-//          .build(), String.class).getBody();
-//
-//      return new GeneralUserId(id);
-//    }
-//    catch (HttpClientErrorException ex) {
-//      if (HttpStatus.BAD_REQUEST.equals(ex.getStatusCode())) {
-//        return null;
-//      }
-//      else {
-//        throw ex;
-//      }
-//    }
-//  }
-
-
   /**
    * The Constructor.
    *
-   * @param environment  The environment of the system.
-   * @param restTemplate The rest caller.
+   * @param environment   The environment of the system.
+   * @param restTemplate  The rest caller.
    * @param clientsConfig The configurations for the client classes.
    */
   @Autowired

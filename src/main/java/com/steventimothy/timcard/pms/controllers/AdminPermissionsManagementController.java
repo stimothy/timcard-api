@@ -59,11 +59,11 @@ public class AdminPermissionsManagementController {
       this.permissionManagementService.checkPermissions(authorizationSession, Collections.singletonList(Permission.ADMIN));
       this.permissionManagementService.checkPermissions(sessionId, permissions);
 
-      log.info("[200] POST: /pms/{} - sessionId={} - Response: OK", session, session);
+      log.info("[200] POST: /pms/{} - sessionId={} - Response: OK", session, authorizationSession);
       return ResponseEntity.ok().build();
     }
     catch (Exception ex) {
-      return this.exceptionMapper.mapExceptionToResponse("POST", "/pms/" + session, session, ex);
+      return this.exceptionMapper.mapExceptionToResponse("POST", "/pms/admin/" + session, authorizationHeader, ex);
     }
   }
 
@@ -77,8 +77,8 @@ public class AdminPermissionsManagementController {
    */
   @PostMapping(value = "/roles/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity addPermission(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-                                       @PathVariable("userId") String userId,
-                                       @RequestBody Role role) {
+                                      @PathVariable("userId") String userId,
+                                      @RequestBody Role role) {
     try {
       SessionId sessionId = idMapper.mapEncodedValueToSessionId(authorizationHeader);
       this.permissionManagementService.checkPermissions(sessionId, Collections.singletonList(Permission.ADMIN));
