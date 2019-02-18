@@ -6,6 +6,7 @@ import com.steventimothy.timcard.repository.schemas.DataPermission;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.permissions.config.PermissionsDbConfig;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,8 +34,11 @@ class PermissionsDbService extends TimcardDbService {
    *
    * @param id The id of the permission
    * @return The data permission matching the id.
+   * @throws DatabaseDataException throws if the data used to query the database was bad.
    */
-  DataPermission get(Long id) {
+  DataPermission get(Long id)
+      throws DatabaseDataException {
+
     DataPermission dataPermission = null;
 
     Connection connection = openConnection();
@@ -56,7 +60,7 @@ class PermissionsDbService extends TimcardDbService {
       }
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("get Exception handling not implemented yet.");
+      throw new DatabaseDataException("The data used to query the database was bad.", ex);
     }
 
     //Close the connection.

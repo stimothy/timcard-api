@@ -6,6 +6,7 @@ import com.steventimothy.timcard.repository.schemas.DataUserRole;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.user_roles.config.UserRolesDbConfig;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,10 +33,14 @@ class UserRolesDbService extends TimcardDbService {
 
   /**
    * Inserts a record that links a user to a role.
+   *
    * @param user_id The user id of the user.
    * @param role_id The role id of the role.
+   * @throws DatabaseDataException Throws if the data used in the query is bad.
    */
-  void insert(String user_id, Long role_id) {
+  void insert(String user_id, Long role_id)
+      throws DatabaseDataException {
+
     Connection connection = openConnection();
 
     try {
@@ -46,7 +51,7 @@ class UserRolesDbService extends TimcardDbService {
       preparedStatement.executeUpdate();
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("Not supported.");
+      throw new DatabaseDataException("The data used in the query was bad.", ex);
     }
 
     closeConnection(connection);
@@ -54,10 +59,14 @@ class UserRolesDbService extends TimcardDbService {
 
   /**
    * Gets all the roles linked to a user.
+   *
    * @param user_id The user id of the user.
    * @return The roles linked to the user.
+   * @throws DatabaseDataException throws if the data used to query the database was bad.
    */
-  List<DataUserRole> getAll(String user_id) {
+  List<DataUserRole> getAll(String user_id)
+      throws DatabaseDataException {
+
     List<DataUserRole> dataUserRoles = new ArrayList<>();
 
     Connection connection = openConnection();
@@ -81,7 +90,7 @@ class UserRolesDbService extends TimcardDbService {
       }
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("Exceptions not implemented yet.");
+      throw new DatabaseDataException("The data used to query the database was bad.", ex);
     }
 
     //Close the connection.
@@ -93,10 +102,10 @@ class UserRolesDbService extends TimcardDbService {
   /**
    * The constructor that receives the autowired components.
    *
-   * @param dbConfig                The dbms config.
-   * @param mysqlDataSource         The datasource object for dbms.
-   * @param timcardDbConfig         The timcard db config.
-   * @param rolePermissionsDbConfig The users table config.
+   * @param dbConfig          The dbms config.
+   * @param mysqlDataSource   The datasource object for dbms.
+   * @param timcardDbConfig   The timcard db config.
+   * @param userRolesDbConfig The users table config.
    */
   @Autowired
   UserRolesDbService(DbConfig dbConfig, TimcardDbConfig timcardDbConfig, UserRolesDbConfig userRolesDbConfig, MysqlDataSource mysqlDataSource) {

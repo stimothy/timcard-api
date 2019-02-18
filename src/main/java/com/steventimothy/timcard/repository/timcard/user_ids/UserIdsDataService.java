@@ -1,6 +1,8 @@
 package com.steventimothy.timcard.repository.timcard.user_ids;
 
 import com.steventimothy.timcard.repository.schemas.DataUserId;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.utils.mappers.IdMapper;
@@ -31,17 +33,31 @@ public class UserIdsDataService {
   /**
    * Gets a new user id from the database.
    * @return The new user id.
+   * @throws DatabaseDataException Throws if the query was bad.
+   * @throws IllegalStateException Throws if a new user id couldn't be retrieved from the database.
    */
-  public UserId getNewUserId() {
+  public UserId getNewUserId()
+      throws DatabaseDataException, IllegalStateException {
+
     DataUserId dataUserId = userIdsDbService.get();
-    return new GeneralUserId(dataUserId.user_id());
+
+    if (dataUserId != null) {
+      return new GeneralUserId(dataUserId.user_id());
+    }
+    else {
+      throw new IllegalStateException("A new User id could not be retrieved.");
+    }
   }
 
   /**
    * Frees up a user id in the database.
    * @param userId The user id to free up.
+   * @throws InvalidDataException throws if the userId could not be mapped to a raw id.
+   * @throws DatabaseDataException throws if the data used in the query was bad.
    */
-  public void freeUserId(UserId userId) {
+  public void freeUserId(UserId userId)
+      throws InvalidDataException, DatabaseDataException {
+
     this.userIdsDbService.update(idMapper.mapUserIdToRawId(userId));
   }
 }

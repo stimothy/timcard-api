@@ -2,6 +2,8 @@ package com.steventimothy.timcard.repository.timcard.user_roles;
 
 import com.steventimothy.timcard.repository.schemas.DataUserRole;
 import com.steventimothy.timcard.repository.timcard.roles.RolesDataService;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.permissions.Role;
 import com.steventimothy.timcard.utils.mappers.IdMapper;
@@ -40,8 +42,12 @@ public class UserRolesDataService {
    * Gets the role ids of linked to the user.
    * @param userId The user id of the user.
    * @return The roles ids linked to the user.
+   * @throws InvalidDataException throws if the user id cannot be mapped to a raw id.
+   * @throws DatabaseDataException throws if the data used to query the database was bad.
    */
-  public List<Long> getRoleIds(UserId userId) {
+  public List<Long> getRoleIds(UserId userId)
+      throws InvalidDataException, DatabaseDataException {
+
     return userRolesDbService.getAll(idMapper.mapUserIdToRawId(userId)).stream()
         .map(DataUserRole::role_id)
         .collect(Collectors.toList());
@@ -51,8 +57,12 @@ public class UserRolesDataService {
    * Adds a role to a user.
    * @param userId The user id of the user to add the role to.
    * @param role The role to add to the user.
+   * @throws InvalidDataException Throws if the userId was bad.
+   * @throws DatabaseDataException Throws if the data used in the query was bad.
    */
-  public void addRole(UserId userId, Role role) {
+  public void addRole(UserId userId, Role role)
+      throws InvalidDataException, DatabaseDataException {
+
     Long role_id = rolesDataService.getRoleId(role.getValue());
     userRolesDbService.insert(idMapper.mapUserIdToRawId(userId), role_id);
   }

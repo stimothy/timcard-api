@@ -6,6 +6,7 @@ import com.steventimothy.timcard.repository.schemas.DataSession;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.sessions.config.SessionsDbConfig;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,16 @@ class SessionsDbService extends TimcardDbService {
    */
   private SessionsDbConfig dbConfig;
 
-  DataSession get(String session_id) {
+  /**
+   * Gets the data session given a session id.
+   *
+   * @param session_id The session id from which to retrieve the user id.
+   * @return The user id linked with that session id.
+   * @throws DatabaseDataException throws if there was a problem querying the database for that data.
+   */
+  DataSession get(String session_id)
+      throws DatabaseDataException {
+
     DataSession dataSession = null;
 
     Connection connection = openConnection();
@@ -54,7 +64,7 @@ class SessionsDbService extends TimcardDbService {
       }
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("get Exception handling not implemented yet.");
+      throw new DatabaseDataException("The userId could not be retrieved.", ex);
     }
 
     //Close the connection.
@@ -63,6 +73,12 @@ class SessionsDbService extends TimcardDbService {
     return dataSession;
   }
 
+  /**
+   * Deletes expired sessions from the database.
+   *
+   * @param connection The connection to talk to the database.
+   * @return True if at least one row was deleted.
+   */
   private boolean deleteExpiredSessions(Connection connection) {
     int affectedRows = 0;
 
@@ -72,7 +88,7 @@ class SessionsDbService extends TimcardDbService {
       affectedRows = preparedStatement.executeUpdate();
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("Sql exception not implemented yet.");
+      log.error("ERROR attempting to delete expired sessions in the database.");
     }
 
     return (affectedRows > 0);
@@ -81,9 +97,9 @@ class SessionsDbService extends TimcardDbService {
   /**
    * The constructor that receives the autowired components.
    *
-   * @param dbConfig                The dbms config.
-   * @param mysqlDataSource         The datasource object for dbms.
-   * @param timcardDbConfig         The timcard db config.
+   * @param dbConfig         The dbms config.
+   * @param mysqlDataSource  The datasource object for dbms.
+   * @param timcardDbConfig  The timcard db config.
    * @param sessionsDbConfig The sessions table config.
    */
   @Autowired

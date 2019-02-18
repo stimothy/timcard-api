@@ -2,6 +2,9 @@ package com.steventimothy.timcard.repository.timcard.sessions;
 
 import com.steventimothy.timcard.repository.schemas.DataSession;
 import com.steventimothy.timcard.repository.timcard.permissions.PermissionsDataService;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
+import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.ids.users.AdminUserId;
 import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
@@ -41,17 +44,26 @@ public class SessionsDataService {
    *
    * @param sessionId The session id to abstract the user id from.
    * @return The user Id matching the session id given.
+   * @throws InvalidDataException throws if the session could not be found in the database.
+   * @throws DatabaseDataException throws if there was a problem with the data used to query.
    */
-  public UserId getUserId(SessionId sessionId) {
+  public UserId getUserId(SessionId sessionId)
+      throws InvalidDataException, DatabaseDataException {
+
     String session = idMapper.mapSessionIdToRawId(sessionId);
 
     DataSession dataSession = sessionsDbService.get(session);
 
-    UserId userId = new GeneralUserId(dataSession.user_id());
-    if (permissionsDataService.getUserPermissions(userId).contains(Permission.ADMIN)) {
-      userId = new AdminUserId(dataSession.user_id());
-    }
+    if (dataSession != null) {
+      UserId userId = new GeneralUserId(dataSession.user_id());
+      if (permissionsDataService.getUserPermissions(userId).contains(Permission.ADMIN)) {
+        userId = new AdminUserId(dataSession.user_id());
+      }
 
-    return userId;
+      return userId;
+    }
+    else {
+      throw new InvalidDataException("The user is unknown to the system.");
+    }
   }
 }

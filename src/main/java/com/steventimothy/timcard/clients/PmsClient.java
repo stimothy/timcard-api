@@ -2,6 +2,8 @@ package com.steventimothy.timcard.clients;
 
 import com.steventimothy.timcard.clients.config.ClientsConfig;
 import com.steventimothy.timcard.schemas.exceptions.ForbiddenException;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
+import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.permissions.Permission;
@@ -33,9 +35,12 @@ public class PmsClient extends BaseClient {
    *
    * @param sessionId   The sessionId of the user.
    * @param permissions The permissions the user needs.
+   * @throws UnauthorizedException throws if the user is unknown to the system.
    * @throws ForbiddenException throws if the user does not have the correct permissions.
    */
-  public void checkPermissions(SessionId sessionId, List<Permission> permissions) throws ForbiddenException {
+  public void checkPermissions(SessionId sessionId, List<Permission> permissions)
+      throws UnauthorizedException, ForbiddenException {
+
     try {
       super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getPmsPath() + "/admin/" + sessionId.getEncodedValue())
           .build().toUri())
@@ -45,7 +50,10 @@ public class PmsClient extends BaseClient {
           .body(permissions), String.class);
     }
     catch (HttpClientErrorException ex) {
-      if (HttpStatus.FORBIDDEN.equals(ex.getStatusCode())) {
+      if (HttpStatus.UNAUTHORIZED.equals(ex.getStatusCode())) {
+        throw new UnauthorizedException("User is unknown.");
+      }
+      else if (HttpStatus.FORBIDDEN.equals(ex.getStatusCode())) {
         throw new ForbiddenException("Permission denied.");
       }
       else {
@@ -59,14 +67,27 @@ public class PmsClient extends BaseClient {
    *
    * @param userId The user id of the user.
    * @param role   The role to add.
+   * @throws InvalidDataException Throws if the user id was bad and couldn't add the role to it.
    */
-  public void addRole(UserId userId, Role role) {
-    super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getPmsPath() + "/admin/roles/" + userId.getEncodedValue())
-        .build().toUri())
-        .header(HttpHeaders.AUTHORIZATION, getSystemSessionId().getEncodedValue())
-        .accept(MediaType.APPLICATION_JSON)
-        .contentType(MediaType.APPLICATION_JSON)
-        .body(role), String.class);
+  public void addRole(UserId userId, Role role)
+      throws InvalidDataException {
+
+    try {
+      super.restTemplate.exchange(RequestEntity.post(UriComponentsBuilder.fromUriString(getPmsPath() + "/admin/roles/" + userId.getEncodedValue())
+          .build().toUri())
+          .header(HttpHeaders.AUTHORIZATION, getSystemSessionId().getEncodedValue())
+          .accept(MediaType.APPLICATION_JSON)
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(role), String.class);
+    }
+    catch (HttpClientErrorException ex) {
+      if (HttpStatus.BAD_REQUEST.equals(ex.getStatusCode())) {
+        throw new InvalidDataException("Could not add the role to the user id.");
+      }
+      else {
+        throw ex;
+      }
+    }
   }
 
 

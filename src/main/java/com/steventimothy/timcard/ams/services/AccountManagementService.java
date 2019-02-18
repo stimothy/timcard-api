@@ -3,6 +3,8 @@ package com.steventimothy.timcard.ams.services;
 import com.steventimothy.timcard.clients.PmsClient;
 import com.steventimothy.timcard.clients.UasClient;
 import com.steventimothy.timcard.repository.timcard.users.UsersDataService;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.ids.users.AdminUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.ids.users.UserIdType;
@@ -51,10 +53,15 @@ public class AccountManagementService {
    * @param user       The user to create.
    * @param userIdType The type of user to create.
    * @return The userId of the user created.
+   * @throws InvalidDataException Throws if the user doesn't have valid data.
+   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   * @throws IllegalStateException Throws if the password couldn't be hashed.
    */
-  public UserId createUser(User user, UserIdType userIdType) {
+  public UserId createUser(User user, UserIdType userIdType)
+      throws InvalidDataException, DatabaseDataException, IllegalStateException {
+
     userUtil.validateUserCreation(user);
-    if (user.userId() == null) {
+    if (user.userId() == null || user.userId().getEncodedValue() == null) {
       user.userId(uasClient.getNewUserId());
     }
 
@@ -71,6 +78,7 @@ public class AccountManagementService {
     }
     catch (Exception ex) {
       uasClient.freeUserId(user.userId());
+      throw ex;
     }
 
     return user.userId();

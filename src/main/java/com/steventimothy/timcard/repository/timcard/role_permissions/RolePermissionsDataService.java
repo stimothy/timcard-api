@@ -1,6 +1,7 @@
 package com.steventimothy.timcard.repository.timcard.role_permissions;
 
 import com.steventimothy.timcard.repository.schemas.DataRolePermission;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,11 @@ public class RolePermissionsDataService {
    * Gets the permission ids linked to a role.
    * @param roleId The role id of the role to get permissions.
    * @return The list of permissions linked to the role.
+   * @throws DatabaseDataException throws if the data passed to query the database was bad.
    */
-  public List<Long> getPermissionIds(Long roleId) {
+  public List<Long> getPermissionIds(Long roleId)
+      throws DatabaseDataException {
+
     return rolePermissionsDbService.getAllByRoleId(roleId).stream()
         .map(DataRolePermission::permission_id)
         .collect(Collectors.toList());

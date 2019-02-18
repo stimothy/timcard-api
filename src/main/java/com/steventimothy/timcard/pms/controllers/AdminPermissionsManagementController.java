@@ -1,6 +1,8 @@
 package com.steventimothy.timcard.pms.controllers;
 
 import com.steventimothy.timcard.pms.services.PermissionManagementService;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
+import com.steventimothy.timcard.schemas.exceptions.UnauthorizedException;
 import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
 import com.steventimothy.timcard.schemas.permissions.Permission;
 import com.steventimothy.timcard.schemas.permissions.Role;
@@ -56,11 +58,14 @@ public class AdminPermissionsManagementController {
       SessionId authorizationSession = idMapper.mapEncodedValueToSessionId(authorizationHeader);
       SessionId sessionId = idMapper.mapEncodedValueToSessionId(session);
 
-      this.permissionManagementService.checkPermissions(authorizationSession, Collections.singletonList(Permission.ADMIN));
+      this.permissionManagementService.checkPermissions(authorizationSession, getHasPermissionsPermissions());
       this.permissionManagementService.checkPermissions(sessionId, permissions);
 
       log.info("[200] POST: /pms/admin/{} - sessionId={} - Response: OK", session, authorizationSession);
       return ResponseEntity.ok().build();
+    }
+    catch (InvalidDataException ex) {
+      return this.exceptionMapper.mapExceptionToResponse("POST", "/pms/admin/" + session, authorizationHeader, new UnauthorizedException("User is unknown."));
     }
     catch (Exception ex) {
       return this.exceptionMapper.mapExceptionToResponse("POST", "/pms/admin/" + session, authorizationHeader, ex);
@@ -76,7 +81,7 @@ public class AdminPermissionsManagementController {
    * @return Ok if they do.
    */
   @PostMapping(value = "/roles/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity addPermission(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+  public ResponseEntity addRole(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
                                       @PathVariable("userId") String userId,
                                       @RequestBody Role role) {
     try {
@@ -91,5 +96,13 @@ public class AdminPermissionsManagementController {
     catch (Exception ex) {
       return this.exceptionMapper.mapExceptionToResponse("POST", "/pms/admin/roles/" + userId, authorizationHeader, ex);
     }
+  }
+
+  /**
+   * Gets a list of the permissions needed to use the hasPermissions endpoint.
+   * @return The list of permissions needed for the hasPermissions endpoint.
+   */
+  private List<Permission> getHasPermissionsPermissions() {
+    return Collections.singletonList(Permission.SUPER_ADMIN);
   }
 }

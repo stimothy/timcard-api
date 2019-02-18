@@ -6,6 +6,7 @@ import com.steventimothy.timcard.repository.schemas.DataRolePermission;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.role_permissions.config.RolePermissionsDbConfig;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,8 +36,9 @@ class RolePermissionsDbService extends TimcardDbService {
    *
    * @param role_Id The id of the role.
    * @return The data permissions that are linked to that role id.
+   * @throws DatabaseDataException throws if the data passed to the database was bad.
    */
-  List<DataRolePermission> getAllByRoleId(Long role_Id) {
+  List<DataRolePermission> getAllByRoleId(Long role_Id) throws DatabaseDataException {
     List<DataRolePermission> dataRolePermissions = new ArrayList<>();
 
     Connection connection = openConnection();
@@ -59,7 +61,7 @@ class RolePermissionsDbService extends TimcardDbService {
       }
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("get Exception handling not implemented yet.");
+      throw new DatabaseDataException("The data used to query the database was bad.", ex);
     }
 
     //Close the connection.

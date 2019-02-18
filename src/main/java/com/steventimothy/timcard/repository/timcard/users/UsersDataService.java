@@ -1,6 +1,7 @@
 package com.steventimothy.timcard.repository.timcard.users;
 
 import com.steventimothy.timcard.repository.schemas.DataUser;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import com.steventimothy.timcard.schemas.users.User;
 import com.steventimothy.timcard.utils.mappers.UserMapper;
 import lombok.AllArgsConstructor;
@@ -39,8 +40,12 @@ public class UsersDataService {
   /**
    * Creates a user in the data.
    * @param user The user to create.
+   * @throws DatabaseDataException throws if there was a problem with the data in the query.
+   * @throws IllegalStateException throws if the password couldn't be hashed.
    */
-  public void createUser(User user) {
+  public void createUser(User user)
+      throws DatabaseDataException, IllegalStateException {
+
     DataUser dataUser = userMapper.map(user);
     dataUser.salt(getSalt());
     dataUser.password(encryptPassword(dataUser.password(), dataUser.salt()));
@@ -63,8 +68,11 @@ public class UsersDataService {
    * @param password The password to hash.
    * @param salt The salt used to hash the password.
    * @return The hashed password.
+   * @throws IllegalStateException Throws if the password couldn't be hashed.
    */
-  private String encryptPassword(String password, String salt) {
+  private String encryptPassword(String password, String salt)
+      throws IllegalStateException {
+
     byte[] salter = Base64.getDecoder().decode(salt);
 
     try {
@@ -75,7 +83,7 @@ public class UsersDataService {
       return Base64.getEncoder().encodeToString(res);
     }
     catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      throw new UnsupportedOperationException("not supported.");
+      throw new IllegalStateException("not supported.");
     }
   }
 }

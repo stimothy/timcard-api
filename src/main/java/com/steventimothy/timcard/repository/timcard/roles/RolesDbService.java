@@ -6,6 +6,7 @@ import com.steventimothy.timcard.repository.schemas.DataRole;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.roles.config.RolesDbConfig;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,8 +34,11 @@ class RolesDbService extends TimcardDbService {
    *
    * @param name The name of the role.
    * @return The data role that matches the name.
+   * @throws DatabaseDataException throws if the data used in the query was bad.
    */
-  DataRole get(String name) {
+  DataRole get(String name)
+      throws DatabaseDataException {
+
     DataRole dataRole = null;
 
     Connection connection = openConnection();
@@ -56,7 +60,7 @@ class RolesDbService extends TimcardDbService {
       }
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("get Exception handling not implemented yet.");
+      throw new DatabaseDataException("The data used in the query was bad.", ex);
     }
 
     //Close the connection.

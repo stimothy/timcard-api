@@ -43,7 +43,8 @@ public class IdentityUtil {
    * @throws UnauthorizedException Throws if the encoded value cannot be mapped to a sessionId.
    * @throws ForbiddenException    Throws if the session Id does not have the right permissions.
    */
-  public SessionId validateUserPermissions(String encodedValue, List<Permission> permissions) throws UnauthorizedException, ForbiddenException {
+  public SessionId validateUserPermissions(String encodedValue, List<Permission> permissions)
+      throws UnauthorizedException, ForbiddenException {
 
     try {
       SessionId sessionId = this.idMapper.mapEncodedValueToSessionId(encodedValue);

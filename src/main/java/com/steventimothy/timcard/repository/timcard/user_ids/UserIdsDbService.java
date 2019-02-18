@@ -6,6 +6,7 @@ import com.steventimothy.timcard.repository.schemas.DataUserId;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.user_ids.config.UserIdsDbConfig;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,8 +32,11 @@ class UserIdsDbService extends TimcardDbService {
   /**
    * Frees up a user id in the database.
    * @param user_id The user id to free.
+   * @throws DatabaseDataException throws if the data used in the query is bad.
    */
-  void update(String user_id) {
+  void update(String user_id)
+      throws DatabaseDataException {
+
     Connection connection = openConnection();
 
     try {
@@ -42,15 +46,18 @@ class UserIdsDbService extends TimcardDbService {
       preparedStatement.executeUpdate();
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("Exception not implemented yet.");
+      throw new DatabaseDataException("The data used in the query was bad.", ex);
     }
   }
 
   /**
    * Gets a new user id from the database.
    * @return The new user retrieved from the database.
+   * @throws DatabaseDataException throws if the query was bad.
    */
-  synchronized DataUserId get() {
+  synchronized DataUserId get()
+      throws DatabaseDataException {
+
     DataUserId dataUserId = null;
 
     Connection connection = openConnection();
@@ -73,7 +80,7 @@ class UserIdsDbService extends TimcardDbService {
 
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("get Exception handling not implemented yet.");
+      throw new DatabaseDataException("The query was bad to query the database.", ex);
     }
 
     //Close the connection.
@@ -86,8 +93,11 @@ class UserIdsDbService extends TimcardDbService {
    * Sets a new user id to used.
    * @param id The id to set to used.
    * @param connection The connection used to talk to the database.
+   * @throws DatabaseDataException throws if the data used in the query was bad.
    */
-  private void setUsed(Long id, Connection connection) {
+  private void setUsed(Long id, Connection connection)
+      throws DatabaseDataException {
+
     try {
       PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = TRUE WHERE id = ?");
       preparedStatement.setLong(1, id);
@@ -95,11 +105,11 @@ class UserIdsDbService extends TimcardDbService {
       int result = preparedStatement.executeUpdate();
 
       if (result != 1) {
-        throw new UnsupportedOperationException("Couldn't set id to used and haven't supported this feature yet.");
+        throw new DatabaseDataException("There was a problem setting the id to being used.");
       }
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("get Exception handling not implemented yet.");
+      throw new DatabaseDataException("The data used in the query was bad.", ex);
     }
   }
 

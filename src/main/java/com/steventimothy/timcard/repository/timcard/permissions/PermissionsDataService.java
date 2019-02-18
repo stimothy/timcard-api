@@ -2,6 +2,8 @@ package com.steventimothy.timcard.repository.timcard.permissions;
 
 import com.steventimothy.timcard.repository.timcard.role_permissions.RolePermissionsDataService;
 import com.steventimothy.timcard.repository.timcard.user_roles.UserRolesDataService;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
+import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.permissions.Permission;
 import com.steventimothy.timcard.utils.mappers.PermissionMapper;
@@ -45,8 +47,12 @@ public class PermissionsDataService {
    * Gets a list of permissions that a user has.
    * @param userId The user id to get permissions.
    * @return The list of permissions the user has.
+   * @throws InvalidDataException throws if the user id was not valid.
+   * @throws DatabaseDataException throws if the data used to query the database was bad.
    */
-  public List<Permission> getUserPermissions(UserId userId) {
+  public List<Permission> getUserPermissions(UserId userId)
+      throws InvalidDataException, DatabaseDataException {
+
     List<Long> roleIds = userRolesDataService.getRoleIds(userId);
 
     return roleIds.stream()

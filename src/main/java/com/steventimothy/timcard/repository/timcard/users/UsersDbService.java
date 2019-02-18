@@ -6,6 +6,7 @@ import com.steventimothy.timcard.repository.schemas.DataUser;
 import com.steventimothy.timcard.repository.timcard.TimcardDbService;
 import com.steventimothy.timcard.repository.timcard.config.TimcardDbConfig;
 import com.steventimothy.timcard.repository.timcard.users.config.UsersDbConfig;
+import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,8 +31,11 @@ class UsersDbService extends TimcardDbService {
   /**
    * Inserts a user into the database.
    * @param dataUser The data user to insert.
+   * @throws DatabaseDataException Throws if the data used in the query was bad.
    */
-  void insert(DataUser dataUser) {
+  void insert(DataUser dataUser)
+      throws DatabaseDataException {
+
     Connection connection = openConnection();
 
     try {
@@ -46,7 +50,7 @@ class UsersDbService extends TimcardDbService {
       preparedStatement.executeUpdate();
     }
     catch (SQLException ex) {
-      throw new UnsupportedOperationException("not supported yet.");
+      throw new DatabaseDataException("The user could not be inserted into the database.", ex);
     }
 
     //Close the connection.
