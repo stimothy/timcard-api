@@ -38,7 +38,7 @@ class UserRolesDbService extends TimcardDbService {
    * @param role_id The role id of the role.
    * @throws DatabaseDataException Throws if the data used in the query is bad.
    */
-  void insert(String user_id, Long role_id)
+  DataUserRole insert(String user_id, Long role_id)
       throws DatabaseDataException {
 
     Connection connection = openConnection();
@@ -57,6 +57,10 @@ class UserRolesDbService extends TimcardDbService {
     closeConnection(connection);
   }
 
+  DataUserRole get(Long id) {
+
+  }
+
   /**
    * Gets all the roles linked to a user.
    *
@@ -64,7 +68,7 @@ class UserRolesDbService extends TimcardDbService {
    * @return The roles linked to the user.
    * @throws DatabaseDataException throws if the data used to query the database was bad.
    */
-  List<DataUserRole> getAll(String user_id)
+  List<DataUserRole> getAllByUserId(String user_id)
       throws DatabaseDataException {
 
     List<DataUserRole> dataUserRoles = new ArrayList<>();
@@ -97,6 +101,26 @@ class UserRolesDbService extends TimcardDbService {
     closeConnection(connection);
 
     return dataUserRoles;
+  }
+
+  List<DataUserRole> getAllByRoleId(Long role_id) {
+
+  }
+
+  Boolean update(DataUserRole dataUserRole) {
+
+  }
+
+  Boolean delete(Long id) {
+
+  }
+
+  Boolean deleteAllByUserId(Long user_id) {
+
+  }
+
+  Boolean deleteAllByRoleId(Long role_id) {
+
   }
 
   /**

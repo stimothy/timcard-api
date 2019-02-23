@@ -33,7 +33,7 @@ class UsersDbService extends TimcardDbService {
    * @param dataUser The data user to insert.
    * @throws DatabaseDataException Throws if the data used in the query was bad.
    */
-  void insert(DataUser dataUser)
+  DataUser insert(DataUser dataUser)
       throws DatabaseDataException {
 
     Connection connection = openConnection();
@@ -55,6 +55,42 @@ class UsersDbService extends TimcardDbService {
 
     //Close the connection.
     closeConnection(connection);
+  }
+
+  DataUser get(Long id) {
+
+  }
+
+  DataUser get(String user_id) {
+
+  }
+
+  DataUser getByUsername(String username) {
+
+  }
+
+  DataUser getByEmail(String email) {
+
+  }
+
+  Boolean update(DataUser dataUser) {
+
+  }
+
+  Boolean delete(Long id) {
+
+  }
+
+  Boolean delete(String user_id) {
+
+  }
+
+  Boolean deleteByUsername(String username) {
+
+  }
+
+  Boolean deleteByEmail(String email) {
+
   }
 
 

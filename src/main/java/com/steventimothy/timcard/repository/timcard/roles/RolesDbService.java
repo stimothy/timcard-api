@@ -29,6 +29,14 @@ class RolesDbService extends TimcardDbService {
    */
   private RolesDbConfig dbConfig;
 
+  DataRole insert(String name) {
+
+  }
+
+  DataRole get(Long id) {
+
+  }
+
   /**
    * Gets the data role by name.
    *
@@ -68,6 +76,19 @@ class RolesDbService extends TimcardDbService {
 
     return dataRole;
   }
+
+  Boolean update(DataRole dataRole) {
+
+  }
+
+  Boolean delete(Long id) {
+
+  }
+
+  Boolean delete(String name) {
+
+  }
+
 
   /**
    * Constructor.

@@ -48,44 +48,71 @@ public class PermissionsDataService {
    * Creates a permission in the database.
    * @param permission The permission to insert.
    * @return The permission that was inserted.
+   * @throws InvalidDataException Throws if the permission could not be created.
    * @throws DatabaseDataException Throws if the data used to query was bad.
    */
   public Permission createPermission(Permission permission)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
-    return this.permissionMapper.map(this.permissionsDbService.insert(permission.getValue()));
+    DataPermission dataPermission = this.permissionsDbService.insert(permission.getValue());
+
+    if (dataPermission != null) {
+      return this.permissionMapper.map(dataPermission);
+    }
+    else {
+      throw new InvalidDataException("The permission could not be created.");
+    }
   }
 
   /**
    * Creates a permission in the database.
    * @param name The name of the permission to insert
    * @return The permission that was inserted.
+   * @throws InvalidDataException Throws if the permission could not be created.
    * @throws DatabaseDataException Throws if the data used to query was bad.
    */
   public Permission createPermission(String name)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
-    return this.permissionMapper.map(this.permissionsDbService.insert(name));
+    DataPermission dataPermission = this.permissionsDbService.insert(name);
+
+    if (dataPermission != null) {
+      return this.permissionMapper.map(dataPermission);
+    }
+    else {
+      throw new InvalidDataException("The permission could not be created.");
+    }
   }
 
   /**
    * Gets a permission by its id.
    * @param id The id of the permission.
    * @return The permission matching the id.
+   * @throws InvalidDataException Throws if the permission could not be created.
+   * @throws DatabaseDataException Throws if the data used to query was bad.
    */
   public Permission getPermission(Long id)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
-    return this.permissionMapper.map(this.permissionsDbService.get(id));
+    DataPermission dataPermission = this.permissionsDbService.get(id);
+
+    if (dataPermission != null) {
+      return this.permissionMapper.map(dataPermission);
+    }
+    else {
+      throw new InvalidDataException("The permission could not be retrieved.");
+    }
   }
 
   /**
    * Gets a permission id.
    * @param permission The permission to get.
    * @return The id of the permission.
+   * @throws InvalidDataException Throws if the permission could not be created.
+   * @throws DatabaseDataException Throws if the data used to query was bad.
    */
   public Long getPermissionId(Permission permission)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
     DataPermission dataPermission = this.permissionsDbService.get(permission.getValue());
 
@@ -101,9 +128,11 @@ public class PermissionsDataService {
    * Gets a permission id.
    * @param name The name of the permission.
    * @return The id of the permission matching the name.
+   * @throws InvalidDataException Throws if the permission could not be created.
+   * @throws DatabaseDataException Throws if the data used to query was bad.
    */
   public Long getPermissionId(String name)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
     DataPermission dataPermission = this.permissionsDbService.get(name);
 
@@ -160,34 +189,43 @@ public class PermissionsDataService {
   /**
    * Deletes a permission in the database.
    * @param id The id of the permission to delete.
+   * @throws InvalidDataException Throws if the data was bad.
    * @throws DatabaseDataException Throws if the data used in the query was bad.
    */
   public void delete(Long id)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
-    this.permissionsDbService.delete(id);
+    if (!this.permissionsDbService.delete(id)) {
+      throw new InvalidDataException("The permission could not be deleted.");
+    }
   }
 
   /**
    * Deletes a permission in the databse.
    * @param permission The permission to delete.
+   * @throws InvalidDataException Throws if the data was bad.
    * @throws DatabaseDataException Throws if the data used in the query was bad.
    */
   public void delete(Permission permission)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
-    this.permissionsDbService.delete(permission.getValue());
+    if (!this.permissionsDbService.delete(permission.getValue())) {
+      throw new InvalidDataException("The permission could not be deleted.");
+    }
   }
 
   /**
    * Deletes a permission in the databse.
    * @param name The name of the permission to delete.
+   * @throws InvalidDataException Throws if the data was bad.
    * @throws DatabaseDataException Throws if the data used in the query was bad.
    */
   public void delete(String name)
-      throws DatabaseDataException {
+      throws InvalidDataException, DatabaseDataException {
 
-    this.permissionsDbService.delete(name);
+    if (!this.permissionsDbService.delete(name)) {
+      throw new InvalidDataException("The permission could not be deleted.");
+    }
   }
 
   /**
@@ -205,7 +243,7 @@ public class PermissionsDataService {
     return roleIds.stream()
         .map(roleId -> rolePermissionsDataService.getPermissionIds(roleId))
         .flatMap(Collection::stream)
-        .map(permissionId -> permissionMapper.map(permissionsDbService.get(permissionId)))
+        .map(this::getPermission)
         .collect(Collectors.toList());
   }
 

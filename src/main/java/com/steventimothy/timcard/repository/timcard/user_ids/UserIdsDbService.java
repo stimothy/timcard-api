@@ -29,6 +29,22 @@ class UserIdsDbService extends TimcardDbService {
    */
   private UserIdsDbConfig dbConfig;
 
+  DataUserId get() {
+
+  }
+
+  DataUserId get(Long id) {
+
+  }
+
+  DataUserId get(String user_id) {
+
+  }
+
+  Boolean update(DataUserId dataUserId, boolean used) {
+
+  }
+
   /**
    * Frees up a user id in the database.
    * @param user_id The user id to free.

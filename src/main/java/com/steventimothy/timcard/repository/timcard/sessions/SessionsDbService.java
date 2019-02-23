@@ -29,6 +29,14 @@ class SessionsDbService extends TimcardDbService {
    */
   private SessionsDbConfig dbConfig;
 
+  DataSession insert(DataSession dataSession) {
+
+  }
+
+  DataSession get(Long id) {
+
+  }
+
   /**
    * Gets the data session given a session id.
    *
@@ -36,7 +44,7 @@ class SessionsDbService extends TimcardDbService {
    * @return The user id linked with that session id.
    * @throws DatabaseDataException throws if there was a problem querying the database for that data.
    */
-  DataSession get(String session_id)
+  DataSession getBySessionId(String session_id)
       throws DatabaseDataException {
 
     DataSession dataSession = null;
@@ -71,6 +79,26 @@ class SessionsDbService extends TimcardDbService {
     closeConnection(connection);
 
     return dataSession;
+  }
+
+  DataSession getByUserId(String user_id) {
+
+  }
+
+  Boolean update(DataSession dataSession) {
+
+  }
+
+  Boolean delete(Long id) {
+
+  }
+
+  Boolean deleteBySessionId(String session_id) {
+
+  }
+
+  Boolean deleteByUserId(String user_id) {
+
   }
 
   /**
