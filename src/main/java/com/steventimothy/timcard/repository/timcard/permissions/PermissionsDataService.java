@@ -1,5 +1,6 @@
 package com.steventimothy.timcard.repository.timcard.permissions;
 
+import com.steventimothy.timcard.repository.schemas.DataPermission;
 import com.steventimothy.timcard.repository.timcard.role_permissions.RolePermissionsDataService;
 import com.steventimothy.timcard.repository.timcard.user_roles.UserRolesDataService;
 import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
@@ -44,6 +45,152 @@ public class PermissionsDataService {
   private PermissionMapper permissionMapper;
 
   /**
+   * Creates a permission in the database.
+   * @param permission The permission to insert.
+   * @return The permission that was inserted.
+   * @throws DatabaseDataException Throws if the data used to query was bad.
+   */
+  public Permission createPermission(Permission permission)
+      throws DatabaseDataException {
+
+    return this.permissionMapper.map(this.permissionsDbService.insert(permission.getValue()));
+  }
+
+  /**
+   * Creates a permission in the database.
+   * @param name The name of the permission to insert
+   * @return The permission that was inserted.
+   * @throws DatabaseDataException Throws if the data used to query was bad.
+   */
+  public Permission createPermission(String name)
+      throws DatabaseDataException {
+
+    return this.permissionMapper.map(this.permissionsDbService.insert(name));
+  }
+
+  /**
+   * Gets a permission by its id.
+   * @param id The id of the permission.
+   * @return The permission matching the id.
+   */
+  public Permission getPermission(Long id)
+      throws DatabaseDataException {
+
+    return this.permissionMapper.map(this.permissionsDbService.get(id));
+  }
+
+  /**
+   * Gets a permission id.
+   * @param permission The permission to get.
+   * @return The id of the permission.
+   */
+  public Long getPermissionId(Permission permission)
+      throws DatabaseDataException {
+
+    DataPermission dataPermission = this.permissionsDbService.get(permission.getValue());
+
+    if (dataPermission != null) {
+      return dataPermission.id();
+    }
+    else {
+      throw new InvalidDataException("The permission could not be found.");
+    }
+  }
+
+  /**
+   * Gets a permission id.
+   * @param name The name of the permission.
+   * @return The id of the permission matching the name.
+   */
+  public Long getPermissionId(String name)
+      throws DatabaseDataException {
+
+    DataPermission dataPermission = this.permissionsDbService.get(name);
+
+    if (dataPermission != null) {
+      return dataPermission.id();
+    }
+    else {
+      throw new InvalidDataException("The permission could not be found.");
+    }
+  }
+
+  /**
+   * Updates the permission to have the new name.
+   * @param id The id of the permission.
+   * @param newName The new name of the permission.
+   * @throws InvalidDataException Throws if the data was bad.
+   * @throws DatabaseDataException Throws if the data in the query was bad.
+   */
+  public void update(Long id, String newName)
+      throws InvalidDataException, DatabaseDataException {
+
+    DataPermission dataPermission = this.permissionsDbService.get(id);
+    update(dataPermission, newName);
+  }
+
+  /**
+   * Updates the permission to have the new name.
+   * @param permission The permission to update.
+   * @param newName The new name of the permission.
+   * @throws InvalidDataException Throws if the data was bad.
+   * @throws DatabaseDataException Throws if the data in the query was bad.
+   */
+  public void update(Permission permission, String newName)
+      throws InvalidDataException, DatabaseDataException {
+
+    DataPermission dataPermission = this.permissionsDbService.get(permission.getValue());
+    update(dataPermission, newName);
+  }
+
+  /**
+   * Updates the permission to have the new name.
+   * @param oldName The old name of the permission.
+   * @param newName The new name of the permission.
+   * @throws InvalidDataException Throws if the data was bad.
+   * @throws DatabaseDataException Throws if the data in the query was bad.
+   */
+  public void update(String oldName, String newName)
+      throws InvalidDataException, DatabaseDataException {
+
+    DataPermission dataPermission = this.permissionsDbService.get(oldName);
+    update(dataPermission, newName);
+  }
+
+  /**
+   * Deletes a permission in the database.
+   * @param id The id of the permission to delete.
+   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   */
+  public void delete(Long id)
+      throws DatabaseDataException {
+
+    this.permissionsDbService.delete(id);
+  }
+
+  /**
+   * Deletes a permission in the databse.
+   * @param permission The permission to delete.
+   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   */
+  public void delete(Permission permission)
+      throws DatabaseDataException {
+
+    this.permissionsDbService.delete(permission.getValue());
+  }
+
+  /**
+   * Deletes a permission in the databse.
+   * @param name The name of the permission to delete.
+   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   */
+  public void delete(String name)
+      throws DatabaseDataException {
+
+    this.permissionsDbService.delete(name);
+  }
+
+  /**
    * Gets a list of permissions that a user has.
    * @param userId The user id to get permissions.
    * @return The list of permissions the user has.
@@ -60,5 +207,27 @@ public class PermissionsDataService {
         .flatMap(Collection::stream)
         .map(permissionId -> permissionMapper.map(permissionsDbService.get(permissionId)))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Updates a permission in the database.
+   * @param dataPermission The data permission to update.
+   * @param newName The new name of the permission.
+   * @throws InvalidDataException throws if the user id was not valid.
+   * @throws DatabaseDataException throws if the data used to query the database was bad.
+   */
+  private void update(DataPermission dataPermission, String newName)
+      throws InvalidDataException, DatabaseDataException {
+
+    if (dataPermission != null) {
+      dataPermission.name(newName);
+
+      if (!this.permissionsDbService.update(dataPermission)) {
+        throw new InvalidDataException("The permission could not be updated.");
+      }
+    }
+    else {
+      throw new InvalidDataException("The permission does not exist.");
+    }
   }
 }

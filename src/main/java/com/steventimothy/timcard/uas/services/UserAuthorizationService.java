@@ -58,4 +58,12 @@ public class UserAuthorizationService {
 
     this.userIdsDataService.freeUserId(userId);
   }
+
+  /**
+   * Marks a userId as used.
+   * @param userId The user id to mark used.
+   */
+  public void markUserIdUsed(UserId userId) {
+    this.userIdsDataService.markUserIdUsed(userId);
+  }
 }

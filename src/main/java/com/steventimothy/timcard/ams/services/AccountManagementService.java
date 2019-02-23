@@ -62,22 +62,25 @@ public class AccountManagementService {
 
     userUtil.validateUserCreation(user);
     if (user.userId() == null || user.userId().getEncodedValue() == null) {
-      user.userId(uasClient.getNewUserId());
+      user.userId(this.uasClient.getNewUserId());
+    }
+    else {
+      this.uasClient.markUserIdUsed(user.userId());
     }
 
     try {
-      usersDataService.createUser(user);
+      this.usersDataService.createUser(user);
 
       if (UserIdType.ADMIN.equals(userIdType)) {
         user.userId(new AdminUserId(idMapper.mapUserIdToRawId(user.userId())));
-        pmsClient.addRole(user.userId(), Role.ADMIN);
+        this.pmsClient.addRole(user.userId(), Role.ADMIN);
       }
       else {
-        pmsClient.addRole(user.userId(), Role.USER);
+        this.pmsClient.addRole(user.userId(), Role.USER);
       }
     }
     catch (Exception ex) {
-      uasClient.freeUserId(user.userId());
+      this.uasClient.freeUserId(user.userId());
       throw ex;
     }
 

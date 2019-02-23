@@ -58,6 +58,16 @@ public class UserIdsDataService {
   public void freeUserId(UserId userId)
       throws InvalidDataException, DatabaseDataException {
 
-    this.userIdsDbService.update(idMapper.mapUserIdToRawId(userId));
+    this.userIdsDbService.update(idMapper.mapUserIdToRawId(userId), false);
+  }
+
+  public void markUserIdUsed(UserId userId) {
+    DataUserId dataUserId = this.userIdsDbService.get(this.idMapper.mapUserIdToRawId(userId));
+    if (dataUserId == null) {
+      this.userIdsDbService.update(idMapper.mapUserIdToRawId(userId), true);
+    }
+    else {
+      throw new InvalidDataException("The user id has already been set by another user.");
+    }
   }
 }

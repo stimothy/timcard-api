@@ -34,14 +34,15 @@ class UserIdsDbService extends TimcardDbService {
    * @param user_id The user id to free.
    * @throws DatabaseDataException throws if the data used in the query is bad.
    */
-  void update(String user_id)
+  void update(String user_id, boolean used)
       throws DatabaseDataException {
 
     Connection connection = openConnection();
 
     try {
-      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = FALSE WHERE user_id = ?");
-      preparedStatement.setString(1, user_id);
+      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = ? WHERE user_id = ?");
+      preparedStatement.setBoolean(1, used);
+      preparedStatement.setString(2, user_id);
 
       preparedStatement.executeUpdate();
     }
@@ -64,6 +65,46 @@ class UserIdsDbService extends TimcardDbService {
 
     try {
       PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE used = FALSE LIMIT 1");
+
+      //Execute the statement
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      //Get the dataUser.
+      if (resultSet.next()) {
+        dataUserId = new DataUserId()
+            .id(resultSet.getLong("id"))
+            .user_id(resultSet.getString("user_id"))
+            .used(resultSet.getBoolean("used"));
+
+        setUsed(dataUserId.id(), connection);
+      }
+
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("The query was bad to query the database.", ex);
+    }
+
+    //Close the connection.
+    closeConnection(connection);
+
+    return dataUserId;
+  }
+
+  /**
+   * Gets a new user id from the database.
+   * @return The new user retrieved from the database.
+   * @throws DatabaseDataException throws if the query was bad.
+   */
+  synchronized DataUserId get(String user_id)
+      throws DatabaseDataException {
+
+    DataUserId dataUserId = null;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE user_id = ?");
+      preparedStatement.setString(1, user_id);
 
       //Execute the statement
       ResultSet resultSet = preparedStatement.executeQuery();

@@ -17,19 +17,53 @@ public class PermissionMapper {
    * Maps a data permission to a permission.
    * @param dataPermission The data permission to map.
    * @return The permission that the data permission mapped to.
+   * @throws UnsupportedOperationException Throws if the permission is unknown to the system.
    */
-  public Permission map(DataPermission dataPermission) {
-    switch (dataPermission.name()) {
-      case "admin":
-        return Permission.ADMIN;
-      case "public":
-        return Permission.PUBLIC;
-      case "super-admin":
-        return Permission.SUPER_ADMIN;
-      case "user":
-        return Permission.USER;
-      default:
-        throw new UnsupportedOperationException("Permission mapping not supported yet.");
+  public Permission map(DataPermission dataPermission)
+      throws UnsupportedOperationException {
+
+    if (dataPermission != null) {
+      switch (dataPermission.name()) {
+        case "admin":
+          return Permission.ADMIN;
+        case "public":
+          return Permission.PUBLIC;
+        case "super-admin":
+          return Permission.SUPER_ADMIN;
+        case "user":
+          return Permission.USER;
+        default:
+          throw new UnsupportedOperationException("Permission mapping not supported yet.");
+      }
+    }
+    else {
+      return null;
+    }
+  }
+
+  /**
+   * Maps a permission to a data permission.
+   * @param permission The permission to map.
+   * @return The data permission that the permission mapped to.
+   * @throws UnsupportedOperationException Throws if the permission is unknown to the system.
+   */
+  public DataPermission map(Permission permission)
+      throws UnsupportedOperationException {
+
+    if (permission != null) {
+      switch (permission) {
+        case ADMIN:
+        case PUBLIC:
+        case SUPER_ADMIN:
+        case USER:
+          return new DataPermission()
+              .name(permission.getValue());
+        default:
+          throw new UnsupportedOperationException("Permission mapping not supported yet.");
+      }
+    }
+    else {
+      return null;
     }
   }
 }

@@ -62,7 +62,7 @@ public class AdminUserAuthorizationController {
    * @param userId The user id that needs to be freed.
    * @return Returns ok if it was successful.
    */
-  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity freeUserId(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
                                    @RequestBody UserId userId) {
     try {
@@ -71,7 +71,26 @@ public class AdminUserAuthorizationController {
       return ResponseEntity.ok().build();
     }
     catch (Exception ex) {
-      return this.exceptionMapper.mapExceptionToResponse("GET", "/uas/admin", authorizationHeader, ex);
+      return this.exceptionMapper.mapExceptionToResponse("POST", "/uas/admin", authorizationHeader, ex);
+    }
+  }
+
+  /**
+   * Marks a user id as being used.
+   * @param authorizationHeader The session id of the user that wants to mark the user id as used.
+   * @param userId The user id to mark used.
+   * @return Returns ok of it was successful.
+   */
+  @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity markUserIdUsed(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+                                       @RequestBody UserId userId) {
+    try {
+      this.identityUtil.validateUserPermissions(authorizationHeader, getMarkUserIdUsedPermission());
+      userAuthorizationService.markUserIdUsed(userId);
+      return ResponseEntity.ok().build();
+    }
+    catch (Exception ex) {
+      return this.exceptionMapper.mapExceptionToResponse("PUT", "/uas/admin", authorizationHeader, ex);
     }
   }
 
@@ -88,6 +107,14 @@ public class AdminUserAuthorizationController {
    * @return The list of permissions needed to free up the user id in the database.
    */
   private List<Permission> getFreeUserIdPermission() {
+    return Collections.singletonList(Permission.SUPER_ADMIN);
+  }
+
+  /**
+   * Gets the list of permissions needed to mark a user id in the database used.
+   * @return The list of permissions needed to mark a user id in the database as used.
+   */
+  private List<Permission> getMarkUserIdUsedPermission() {
     return Collections.singletonList(Permission.SUPER_ADMIN);
   }
 }

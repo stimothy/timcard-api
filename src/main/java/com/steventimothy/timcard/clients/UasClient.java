@@ -64,6 +64,30 @@ public class UasClient extends BaseClient {
     }
   }
 
+  /**
+   * Marks a user id as being used.
+   * @param userId The user id to mark as used.
+   */
+  public void markUserIdUsed(UserId userId) {
+
+    try {
+      super.restTemplate.exchange(RequestEntity.put(UriComponentsBuilder.fromUriString(getUasPath() + "/admin")
+          .build().toUri())
+          .header(HttpHeaders.AUTHORIZATION, getSystemSessionId().getEncodedValue())
+          .accept(MediaType.APPLICATION_JSON)
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(userId), String.class);
+    }
+    catch (HttpClientErrorException ex) {
+      if (HttpStatus.BAD_REQUEST.equals(ex.getStatusCode())) {
+        throw new InvalidDataException("The user id could no be marked as used.");
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
+
 
   /**
    * The Constructor.
