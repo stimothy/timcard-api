@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * <h1>The RolesDbService Class</h1>
@@ -29,65 +26,202 @@ class RolesDbService extends TimcardDbService {
    */
   private RolesDbConfig dbConfig;
 
-//  DataRole insert(String name) {
-//
-//  }
-//
-//  DataRole get(Long id) {
-//
-//  }
-//
-//  /**
-//   * Gets the data role by name.
-//   *
-//   * @param name The name of the role.
-//   * @return The data role that matches the name.
-//   * @throws DatabaseDataException throws if the data used in the query was bad.
-//   */
-//  DataRole get(String name)
-//      throws DatabaseDataException {
-//
-//    DataRole dataRole = null;
-//
-//    Connection connection = openConnection();
-//
-//    try {
-//      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE name = ?");
-//      preparedStatement.setString(1, name);
-//
-//      //Execute the statement
-//      ResultSet resultSet = preparedStatement.executeQuery();
-//
-//      //Get the dataUser.
-//      if (resultSet.next()) {
-//        dataRole = new DataRole()
-//            .id(resultSet.getLong("id"))
-//            .name(resultSet.getString("name"))
-//            .date_created(resultSet.getTimestamp("date_created").toInstant())
-//            .last_modified(resultSet.getTimestamp("last_modified").toInstant());
-//      }
-//    }
-//    catch (SQLException ex) {
-//      throw new DatabaseDataException("The data used in the query was bad.", ex);
-//    }
-//
-//    //Close the connection.
-//    closeConnection(connection);
-//
-//    return dataRole;
-//  }
-//
-//  Boolean update(DataRole dataRole) {
-//
-//  }
-//
-//  Boolean delete(Long id) {
-//
-//  }
-//
-//  Boolean delete(String name) {
-//
-//  }
+  /**
+   * Inserts a data role into the database.
+   * @param dataRole The data role to insert.
+   * @return The id of the inserted data role.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
+   */
+  Long insert(DataRole dataRole)
+      throws DatabaseDataException {
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + this.dbConfig.getTableName() + " (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+      preparedStatement.setString(1, dataRole.name());
+
+      preparedStatement.executeUpdate();
+
+      ResultSet resultSet = preparedStatement.getGeneratedKeys();
+      if (resultSet.next()) {
+        dataRole.id(resultSet.getLong(1));
+      }
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
+    }
+
+    closeConnection(connection);
+
+    return dataRole.id();
+  }
+
+  /**
+   * Gets a data role from the database.
+   * @param id The id of the data role to retrieve.
+   * @return The data role retrieved from the database.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
+   */
+  DataRole get(Long id)
+      throws DatabaseDataException {
+
+    DataRole dataRole;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + this.dbConfig.getTableName() + " WHERE id = ?");
+      preparedStatement.setLong(1, id);
+
+      dataRole = get(preparedStatement);
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
+    }
+
+    closeConnection(connection);
+
+    return dataRole;
+  }
+
+  /**
+   * Gets a data role from the database.
+   * @param name The name of the data role to retrieve.
+   * @return The data role retrieved from the database.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
+   */
+  DataRole get(String name)
+      throws DatabaseDataException {
+
+    DataRole dataRole;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + this.dbConfig.getTableName() + " WHERE name = ?");
+      preparedStatement.setString(1, name);
+
+      dataRole = get(preparedStatement);
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
+    }
+
+    closeConnection(connection);
+
+    return dataRole;
+  }
+
+  /**
+   * Updates a data role in the database.
+   * @param dataRole The data role containing the new values.
+   * @return True if the data was updated.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
+   */
+  Boolean update(DataRole dataRole)
+      throws DatabaseDataException {
+
+    int rowsAffected;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + this.dbConfig.getTableName() + " SET name = ?, last_modified = ? WHERE id = ?");
+      preparedStatement.setString(1, dataRole.name());
+      preparedStatement.setTimestamp(2, dataRole.last_modified());
+      preparedStatement.setLong(3, dataRole.id());
+
+      rowsAffected = preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
+    }
+
+    closeConnection(connection);
+
+    return (rowsAffected > 0);
+  }
+
+  /**
+   * Deletes a data role from the database.
+   * @param id The id of the data role to delete.
+   * @return True if the data was deleted.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
+   */
+  Boolean delete(Long id)
+      throws DatabaseDataException {
+
+    int rowsAffected;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + this.dbConfig.getTableName() + " WHERE id = ?");
+      preparedStatement.setLong(1, id);
+
+      rowsAffected = preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
+    }
+
+    closeConnection(connection);
+
+    return (rowsAffected > 0);
+  }
+
+  /**
+   * Deletes a data role from the database.
+   * @param name The name of the data role to delete.
+   * @return True if the data was deleted successfully.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
+   */
+  Boolean delete(String name)
+      throws DatabaseDataException {
+
+    int rowsAffected;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + this.dbConfig.getTableName() + " WHERE name = ?");
+      preparedStatement.setString(1, name);
+
+      rowsAffected = preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
+    }
+
+    closeConnection(connection);
+
+    return (rowsAffected > 0);
+  }
+
+  /**
+   * Gets the data role from the database.
+   * @param preparedStatement The prepared statement containing the query to retrieve the data.
+   * @return The data role retrieved from the database.
+   * @throws SQLException Throws if there was a problem with the query to the database.
+   */
+  private DataRole get(PreparedStatement preparedStatement)
+      throws SQLException {
+
+    DataRole dataRole = null;
+
+    ResultSet resultSet = preparedStatement.executeQuery();
+
+    if (resultSet.next()) {
+      dataRole = new DataRole()
+          .id(resultSet.getLong("id"))
+          .name(resultSet.getString("name"))
+          .date_created(resultSet.getTimestamp("date_created"))
+          .last_modified(resultSet.getTimestamp("last_modified"));
+    }
+
+    return dataRole;
+  }
 
 
   /**

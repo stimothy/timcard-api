@@ -1,23 +1,24 @@
 package com.steventimothy.timcard.schemas.permissions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.time.Instant;
 
 /**
- * <h1>The Permission Enum</h1>
- * <p>Holds the different types of permissions of the timcard api.</p>
+ * <h1>The User Class</h1>
+ * <p>This class holds the data members associated with a user.</p>
  */
-@Getter
-@AllArgsConstructor
-public enum Permission {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@NoArgsConstructor
+@Accessors(fluent = true)
+@Data
+public class Permission {
 
-  ADMIN("admin"),
-  PUBLIC("public"),
-  SUPER_ADMIN("super-admin"),
-  USER("user");
-
-  /**
-   * The value of the permission.
-   */
-  private String value;
+  private Long id;
+  private PermissionType permissionType;
+  private Instant dateCreated;
+  private Instant lastModified;
 }

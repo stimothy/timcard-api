@@ -2,9 +2,8 @@ package com.steventimothy.timcard.repository.timcard.permissions;
 
 import com.steventimothy.timcard.repository.schemas.DataPermission;
 import com.steventimothy.timcard.repository.timcard.TimcardBaseComponent;
-import com.steventimothy.timcard.schemas.Permission;
-import com.steventimothy.timcard.schemas.PermissionType;
-import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
+import com.steventimothy.timcard.schemas.permissions.Permission;
+import com.steventimothy.timcard.schemas.permissions.PermissionType;
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.steventimothy.timcard.repository.timcard.permissions;
 
 import com.steventimothy.timcard.repository.schemas.DataPermission;
-import com.steventimothy.timcard.schemas.Permission;
-import com.steventimothy.timcard.schemas.PermissionType;
+import com.steventimothy.timcard.schemas.permissions.Permission;
+import com.steventimothy.timcard.schemas.permissions.PermissionType;
 import com.steventimothy.timcard.schemas.exceptions.DatabaseDataException;
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import com.steventimothy.timcard.utils.mappers.PermissionMapper;

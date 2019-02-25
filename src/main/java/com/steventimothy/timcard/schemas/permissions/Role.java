@@ -1,23 +1,24 @@
 package com.steventimothy.timcard.schemas.permissions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.time.Instant;
 
 /**
- * <h1>The Role Enum</h1>
- * <p>Holds the different types of roles of the timcard api.</p>
+ * <h1>The User Class</h1>
+ * <p>This class holds the data members associated with a user.</p>
  */
-@Getter
-@AllArgsConstructor
-public enum Role {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@NoArgsConstructor
+@Accessors(fluent = true)
+@Data
+public class Role {
 
-  ADMIN("admin"),
-  GENERAL("general"),
-  SUPER_ADMIN("super-admin"),
-  USER("user");
-
-  /**
-   * The value of a role.
-   */
-  private String value;
+  private Long id;
+  private RoleType roleType;
+  private Instant dateCreated;
+  private Instant lastModified;
 }

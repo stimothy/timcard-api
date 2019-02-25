@@ -22,7 +22,7 @@ public class ExceptionMapper {
 //   * a respond with a 500.
 //   */
 //  public ResponseEntity mapExceptionToResponse(String method, String path, String sessionId, Exception ex) {
-//    if (InvalidDataException.class.equals(ex.getClass()) || DatabaseDataException.class.equals(ex.getClass())) {
+//    if (InvalidDataException.class.equals(ex.getClass())) {
 //      log.warn("[400] {}: {} - sessionId={} - {}", method, path, sessionId, ex.getMessage());
 //      return ResponseEntity.badRequest().build();
 //    }

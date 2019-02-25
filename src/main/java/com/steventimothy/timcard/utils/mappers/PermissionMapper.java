@@ -1,8 +1,11 @@
 package com.steventimothy.timcard.utils.mappers;
 
 import com.steventimothy.timcard.repository.schemas.DataPermission;
-import com.steventimothy.timcard.schemas.Permission;
-import com.steventimothy.timcard.schemas.PermissionType;
+import com.steventimothy.timcard.repository.schemas.DataRole;
+import com.steventimothy.timcard.schemas.permissions.Permission;
+import com.steventimothy.timcard.schemas.permissions.PermissionType;
+import com.steventimothy.timcard.schemas.permissions.Role;
+import com.steventimothy.timcard.schemas.permissions.RoleType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +42,7 @@ public class PermissionMapper {
     if (dataPermission != null) {
       Permission permission = new Permission()
           .id(dataPermission.id())
-          .permissionType(map(dataPermission.name()));
+          .permissionType(mapPermissionType(dataPermission.name()));
       permission.dateCreated(map(dataPermission.date_created()));
       permission.lastModified(map(dataPermission.last_modified()));
 
@@ -50,7 +53,40 @@ public class PermissionMapper {
     }
   }
 
-  private PermissionType map(String name)
+  public DataRole map(Role role) {
+
+    if (role != null) {
+      DataRole dataRole = new DataRole()
+          .id(role.id())
+          .name(role.roleType().getName());
+      dataRole.date_created(map(role.dateCreated()));
+      dataRole.last_modified(map(role.lastModified()));
+
+      return dataRole;
+    }
+    else {
+      return null;
+    }
+  }
+
+  public Role map(DataRole dataRole)
+      throws UnsupportedOperationException {
+
+    if (dataRole != null) {
+      Role role = new Role()
+          .id(dataRole.id())
+          .roleType(mapRoletype(dataRole.name()));
+      role.dateCreated(map(dataRole.date_created()));
+      role.lastModified(map(dataRole.last_modified()));
+
+      return role;
+    }
+    else {
+      return null;
+    }
+  }
+
+  private PermissionType mapPermissionType(String name)
       throws UnsupportedOperationException {
 
     if (name != null) {
@@ -65,6 +101,28 @@ public class PermissionMapper {
           return PermissionType.USER;
         default:
           throw new UnsupportedOperationException("The name: " + name + " could not be mapped to a permission type.");
+      }
+    }
+    else {
+      return null;
+    }
+  }
+
+  private RoleType mapRoletype(String name)
+      throws UnsupportedOperationException {
+
+    if (name != null) {
+      switch (name) {
+        case "admin":
+          return RoleType.ADMIN;
+        case "general":
+          return RoleType.GENERAL;
+        case "super-admin":
+          return RoleType.SUPER_ADMIN;
+        case "user":
+          return RoleType.USER;
+        default:
+          throw new UnsupportedOperationException("The name: " + name + " could not be mapped to a role type.");
       }
     }
     else {

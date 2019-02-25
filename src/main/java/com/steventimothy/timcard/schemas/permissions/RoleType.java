@@ -1,4 +1,4 @@
-package com.steventimothy.timcard.schemas;
+package com.steventimothy.timcard.schemas.permissions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,10 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum  PermissionType {
+public enum RoleType {
 
   ADMIN("admin"),
-  PUBLIC("public"),
+  GENERAL("general"),
   SUPER_ADMIN("super-admin"),
   USER("user");
 

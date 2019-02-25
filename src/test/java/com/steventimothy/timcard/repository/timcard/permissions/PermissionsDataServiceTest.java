@@ -1,9 +1,11 @@
 package com.steventimothy.timcard.repository.timcard.permissions;
 
-import com.steventimothy.timcard.schemas.Permission;
-import com.steventimothy.timcard.schemas.PermissionType;
+import com.steventimothy.timcard.schemas.permissions.Permission;
+import com.steventimothy.timcard.schemas.permissions.PermissionType;
 import com.steventimothy.timcard.schemas.exceptions.InvalidDataException;
 import org.junit.Test;
+
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -110,14 +112,23 @@ public class PermissionsDataServiceTest extends PermissionsBaseComponent {
   @Test
   public void testUpdatePermission_Valid() {
     Permission permission = createPermission(createLocalPermission());
+    Instant instant = permission.lastModified();
     permission.permissionType(PermissionType.USER);
+    try {
+      Thread.sleep(1000);
+    }
+    catch (InterruptedException e) {
+      //Noop.
+    }
 
     updatePermission(permission);
 
     Permission permission2 = getPermission(permission.id());
 
     assertThat(permission2)
-        .isEqualTo(permission);
+        .isEqualToIgnoringGivenFields(permission, "lastModified");
+    assertThat(permission2.lastModified())
+        .isAfter(instant);
   }
 
   /**
