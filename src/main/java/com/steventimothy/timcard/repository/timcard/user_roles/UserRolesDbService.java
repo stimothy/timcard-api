@@ -31,97 +31,97 @@ class UserRolesDbService extends TimcardDbService {
    */
   private UserRolesDbConfig dbConfig;
 
-  /**
-   * Inserts a record that links a user to a role.
-   *
-   * @param user_id The user id of the user.
-   * @param role_id The role id of the role.
-   * @throws DatabaseDataException Throws if the data used in the query is bad.
-   */
-  DataUserRole insert(String user_id, Long role_id)
-      throws DatabaseDataException {
-
-    Connection connection = openConnection();
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + dbConfig.getTableName() + " (user_id, role_id) VALUES(?, ?)");
-      preparedStatement.setString(1, user_id);
-      preparedStatement.setLong(2, role_id);
-
-      preparedStatement.executeUpdate();
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The data used in the query was bad.", ex);
-    }
-
-    closeConnection(connection);
-  }
-
-  DataUserRole get(Long id) {
-
-  }
-
-  /**
-   * Gets all the roles linked to a user.
-   *
-   * @param user_id The user id of the user.
-   * @return The roles linked to the user.
-   * @throws DatabaseDataException throws if the data used to query the database was bad.
-   */
-  List<DataUserRole> getAllByUserId(String user_id)
-      throws DatabaseDataException {
-
-    List<DataUserRole> dataUserRoles = new ArrayList<>();
-
-    Connection connection = openConnection();
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE user_id = ?");
-      preparedStatement.setString(1, user_id);
-
-      //Execute the statement
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      //Get the dataUser.
-      while (resultSet.next()) {
-        dataUserRoles.add(new DataUserRole()
-            .id(resultSet.getLong("id"))
-            .user_id(resultSet.getString("user_id"))
-            .role_id(resultSet.getLong("role_id"))
-            .date_created(resultSet.getTimestamp("date_created").toInstant())
-            .last_modified(resultSet.getTimestamp("last_modified").toInstant())
-        );
-      }
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The data used to query the database was bad.", ex);
-    }
-
-    //Close the connection.
-    closeConnection(connection);
-
-    return dataUserRoles;
-  }
-
-  List<DataUserRole> getAllByRoleId(Long role_id) {
-
-  }
-
-  Boolean update(DataUserRole dataUserRole) {
-
-  }
-
-  Boolean delete(Long id) {
-
-  }
-
-  Boolean deleteAllByUserId(Long user_id) {
-
-  }
-
-  Boolean deleteAllByRoleId(Long role_id) {
-
-  }
+//  /**
+//   * Inserts a record that links a user to a role.
+//   *
+//   * @param user_id The user id of the user.
+//   * @param role_id The role id of the role.
+//   * @throws DatabaseDataException Throws if the data used in the query is bad.
+//   */
+//  DataUserRole insert(String user_id, Long role_id)
+//      throws DatabaseDataException {
+//
+//    Connection connection = openConnection();
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + dbConfig.getTableName() + " (user_id, role_id) VALUES(?, ?)");
+//      preparedStatement.setString(1, user_id);
+//      preparedStatement.setLong(2, role_id);
+//
+//      preparedStatement.executeUpdate();
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The data used in the query was bad.", ex);
+//    }
+//
+//    closeConnection(connection);
+//  }
+//
+//  DataUserRole get(Long id) {
+//
+//  }
+//
+//  /**
+//   * Gets all the roles linked to a user.
+//   *
+//   * @param user_id The user id of the user.
+//   * @return The roles linked to the user.
+//   * @throws DatabaseDataException throws if the data used to query the database was bad.
+//   */
+//  List<DataUserRole> getAllByUserId(String user_id)
+//      throws DatabaseDataException {
+//
+//    List<DataUserRole> dataUserRoles = new ArrayList<>();
+//
+//    Connection connection = openConnection();
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE user_id = ?");
+//      preparedStatement.setString(1, user_id);
+//
+//      //Execute the statement
+//      ResultSet resultSet = preparedStatement.executeQuery();
+//
+//      //Get the dataUser.
+//      while (resultSet.next()) {
+//        dataUserRoles.add(new DataUserRole()
+//            .id(resultSet.getLong("id"))
+//            .user_id(resultSet.getString("user_id"))
+//            .role_id(resultSet.getLong("role_id"))
+//            .date_created(resultSet.getTimestamp("date_created").toInstant())
+//            .last_modified(resultSet.getTimestamp("last_modified").toInstant())
+//        );
+//      }
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+//    }
+//
+//    //Close the connection.
+//    closeConnection(connection);
+//
+//    return dataUserRoles;
+//  }
+//
+//  List<DataUserRole> getAllByRoleId(Long role_id) {
+//
+//  }
+//
+//  Boolean update(DataUserRole dataUserRole) {
+//
+//  }
+//
+//  Boolean delete(Long id) {
+//
+//  }
+//
+//  Boolean deleteAllByUserId(Long user_id) {
+//
+//  }
+//
+//  Boolean deleteAllByRoleId(Long role_id) {
+//
+//  }
 
   /**
    * The constructor that receives the autowired components.

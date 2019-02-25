@@ -29,98 +29,98 @@ class SessionsDbService extends TimcardDbService {
    */
   private SessionsDbConfig dbConfig;
 
-  DataSession insert(DataSession dataSession) {
-
-  }
-
-  DataSession get(Long id) {
-
-  }
-
-  /**
-   * Gets the data session given a session id.
-   *
-   * @param session_id The session id from which to retrieve the user id.
-   * @return The user id linked with that session id.
-   * @throws DatabaseDataException throws if there was a problem querying the database for that data.
-   */
-  DataSession getBySessionId(String session_id)
-      throws DatabaseDataException {
-
-    DataSession dataSession = null;
-
-    Connection connection = openConnection();
-
-    deleteExpiredSessions(connection);
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE session_id = ?");
-      preparedStatement.setString(1, session_id);
-
-      //Execute the statement
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      //Get the dataUser.
-      if (resultSet.next()) {
-        dataSession = new DataSession()
-            .id(resultSet.getLong("id"))
-            .session_id(resultSet.getString("session_id"))
-            .user_id(resultSet.getString("user_id"))
-            .expiration(resultSet.getTimestamp("expiration").toInstant())
-            .date_created(resultSet.getTimestamp("date_created").toInstant())
-            .last_modified(resultSet.getTimestamp("last_modified").toInstant());
-      }
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The userId could not be retrieved.", ex);
-    }
-
-    //Close the connection.
-    closeConnection(connection);
-
-    return dataSession;
-  }
-
-  DataSession getByUserId(String user_id) {
-
-  }
-
-  Boolean update(DataSession dataSession) {
-
-  }
-
-  Boolean delete(Long id) {
-
-  }
-
-  Boolean deleteBySessionId(String session_id) {
-
-  }
-
-  Boolean deleteByUserId(String user_id) {
-
-  }
-
-  /**
-   * Deletes expired sessions from the database.
-   *
-   * @param connection The connection to talk to the database.
-   * @return True if at least one row was deleted.
-   */
-  private boolean deleteExpiredSessions(Connection connection) {
-    int affectedRows = 0;
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + dbConfig.getTableName() + " WHERE expiration < NOW()");
-
-      affectedRows = preparedStatement.executeUpdate();
-    }
-    catch (SQLException ex) {
-      log.error("ERROR attempting to delete expired sessions in the database.");
-    }
-
-    return (affectedRows > 0);
-  }
+//  DataSession insert(DataSession dataSession) {
+//
+//  }
+//
+//  DataSession get(Long id) {
+//
+//  }
+//
+//  /**
+//   * Gets the data session given a session id.
+//   *
+//   * @param session_id The session id from which to retrieve the user id.
+//   * @return The user id linked with that session id.
+//   * @throws DatabaseDataException throws if there was a problem querying the database for that data.
+//   */
+//  DataSession getBySessionId(String session_id)
+//      throws DatabaseDataException {
+//
+//    DataSession dataSession = null;
+//
+//    Connection connection = openConnection();
+//
+//    deleteExpiredSessions(connection);
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE session_id = ?");
+//      preparedStatement.setString(1, session_id);
+//
+//      //Execute the statement
+//      ResultSet resultSet = preparedStatement.executeQuery();
+//
+//      //Get the dataUser.
+//      if (resultSet.next()) {
+//        dataSession = new DataSession()
+//            .id(resultSet.getLong("id"))
+//            .session_id(resultSet.getString("session_id"))
+//            .user_id(resultSet.getString("user_id"))
+//            .expiration(resultSet.getTimestamp("expiration").toInstant())
+//            .date_created(resultSet.getTimestamp("date_created").toInstant())
+//            .last_modified(resultSet.getTimestamp("last_modified").toInstant());
+//      }
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The userId could not be retrieved.", ex);
+//    }
+//
+//    //Close the connection.
+//    closeConnection(connection);
+//
+//    return dataSession;
+//  }
+//
+//  DataSession getByUserId(String user_id) {
+//
+//  }
+//
+//  Boolean update(DataSession dataSession) {
+//
+//  }
+//
+//  Boolean delete(Long id) {
+//
+//  }
+//
+//  Boolean deleteBySessionId(String session_id) {
+//
+//  }
+//
+//  Boolean deleteByUserId(String user_id) {
+//
+//  }
+//
+//  /**
+//   * Deletes expired sessions from the database.
+//   *
+//   * @param connection The connection to talk to the database.
+//   * @return True if at least one row was deleted.
+//   */
+//  private boolean deleteExpiredSessions(Connection connection) {
+//    int affectedRows = 0;
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + dbConfig.getTableName() + " WHERE expiration < NOW()");
+//
+//      affectedRows = preparedStatement.executeUpdate();
+//    }
+//    catch (SQLException ex) {
+//      log.error("ERROR attempting to delete expired sessions in the database.");
+//    }
+//
+//    return (affectedRows > 0);
+//  }
 
   /**
    * The constructor that receives the autowired components.

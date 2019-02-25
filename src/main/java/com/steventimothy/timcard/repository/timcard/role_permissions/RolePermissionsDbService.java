@@ -172,20 +172,122 @@ class RolePermissionsDbService extends TimcardDbService {
     return dataRolePermissions;
   }
 
-  Boolean update(DataRolePermission dataRolePermission) {
+  /**
+   * Updates a data role permission in the database.
+   * @param dataRolePermission The data role permission updated.
+   * @return True if it was successfully updated.
+   * @throws DatabaseDataException Throws if there was something wrong with the data in the query.
+   */
+  Boolean update(DataRolePermission dataRolePermission)
+      throws DatabaseDataException {
 
+    int rowsAffected = 0;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET role_id = ? AND permission_id = ? WHERE id = ?");
+      preparedStatement.setLong(1, dataRolePermission.role_id());
+      preparedStatement.setLong(2, dataRolePermission.permission_id());
+      preparedStatement.setLong(3, dataRolePermission.id());
+
+      rowsAffected = preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+    }
+
+    //Close the connection.
+    closeConnection(connection);
+
+    return (rowsAffected > 0);
   }
 
-  Boolean delete(Long id) {
+  /**
+   * Deletes a data role permission in the database.
+   * @param id The id of the data role permission to delete.
+   * @return True if the deletion was successful.
+   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   */
+  Boolean delete(Long id)
+      throws DatabaseDataException {
 
+    int rowsAffected = 0;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + dbConfig.getTableName() + " WHERE id = ?");
+      preparedStatement.setLong(1, id);
+
+      rowsAffected = preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+    }
+
+    //Close the connection.
+    closeConnection(connection);
+
+    return (rowsAffected > 0);
   }
 
-  Boolean deleteAllByRoleId(Long role_id) {
+  /**
+   * Deletes all the data role permission that have the given role id in the database.
+   * @param role_id The role id of the data role permissions to delete.
+   * @return True if more than 0 rows were updated.
+   * @throws DatabaseDataException Throws if there was a problem with the data in the query.
+   */
+  Boolean deleteAllByRoleId(Long role_id)
+      throws DatabaseDataException {
 
+    int rowsAffected = 0;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + dbConfig.getTableName() + " WHERE role_id = ?");
+      preparedStatement.setLong(1, role_id);
+
+      rowsAffected = preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+    }
+
+    //Close the connection.
+    closeConnection(connection);
+
+    return (rowsAffected > 0);
   }
 
-  Boolean deleteAllByPermissionId(Long permission_id) {
+  /**
+   * Deletes all the data role permission that have the given permission id in the database.
+   * @param permission_id The permission id of the data role permissions to delete.
+   * @return True if more than 0 rows were updated.
+   * @throws DatabaseDataException Throws if there was a problem with the data in the query.
+   */
+  Boolean deleteAllByPermissionId(Long permission_id)
+      throws DatabaseDataException {
 
+    int rowsAffected = 0;
+
+    Connection connection = openConnection();
+
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + dbConfig.getTableName() + " WHERE permission_id = ?");
+      preparedStatement.setLong(1, permission_id);
+
+      rowsAffected = preparedStatement.executeUpdate();
+    }
+    catch (SQLException ex) {
+      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+    }
+
+    //Close the connection.
+    closeConnection(connection);
+
+    return (rowsAffected > 0);
   }
 
   /**

@@ -28,62 +28,62 @@ import java.util.Base64;
 @Component
 public class UsersDataService {
 
-  /**
-   * The utility that maps users and data users.
-   */
-  private UserMapper userMapper;
-  /**
-   * That database layer that is used to talk to the users table.
-   */
-  private UsersDbService usersDbService;
-
-  /**
-   * Creates a user in the data.
-   * @param user The user to create.
-   * @throws DatabaseDataException throws if there was a problem with the data in the query.
-   * @throws IllegalStateException throws if the password couldn't be hashed.
-   */
-  public void createUser(User user)
-      throws DatabaseDataException, IllegalStateException {
-
-    DataUser dataUser = userMapper.map(user);
-    dataUser.salt(getSalt());
-    dataUser.password(encryptPassword(dataUser.password(), dataUser.salt()));
-    usersDbService.insert(dataUser);
-  }
-
-  /**
-   * Gets a salt used to hash the password.
-   * @return The salt used to hash the password.
-   */
-  private String getSalt() {
-    SecureRandom random = new SecureRandom();
-    byte[] salt = new byte[64];
-    random.nextBytes(salt);
-    return Base64.getEncoder().encodeToString(salt);
-  }
-
-  /**
-   * Hashes the password to store in the database.
-   * @param password The password to hash.
-   * @param salt The salt used to hash the password.
-   * @return The hashed password.
-   * @throws IllegalStateException Throws if the password couldn't be hashed.
-   */
-  private String encryptPassword(String password, String salt)
-      throws IllegalStateException {
-
-    byte[] salter = Base64.getDecoder().decode(salt);
-
-    try {
-      SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-      PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salter, 1000, 512);
-      SecretKey key = skf.generateSecret(spec);
-      byte[] res = key.getEncoded();
-      return Base64.getEncoder().encodeToString(res);
-    }
-    catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      throw new IllegalStateException("not supported.");
-    }
-  }
+//  /**
+//   * The utility that maps users and data users.
+//   */
+//  private UserMapper userMapper;
+//  /**
+//   * That database layer that is used to talk to the users table.
+//   */
+//  private UsersDbService usersDbService;
+//
+//  /**
+//   * Creates a user in the data.
+//   * @param user The user to create.
+//   * @throws DatabaseDataException throws if there was a problem with the data in the query.
+//   * @throws IllegalStateException throws if the password couldn't be hashed.
+//   */
+//  public void createUser(User user)
+//      throws DatabaseDataException, IllegalStateException {
+//
+//    DataUser dataUser = userMapper.map(user);
+//    dataUser.salt(getSalt());
+//    dataUser.password(encryptPassword(dataUser.password(), dataUser.salt()));
+//    usersDbService.insert(dataUser);
+//  }
+//
+//  /**
+//   * Gets a salt used to hash the password.
+//   * @return The salt used to hash the password.
+//   */
+//  private String getSalt() {
+//    SecureRandom random = new SecureRandom();
+//    byte[] salt = new byte[64];
+//    random.nextBytes(salt);
+//    return Base64.getEncoder().encodeToString(salt);
+//  }
+//
+//  /**
+//   * Hashes the password to store in the database.
+//   * @param password The password to hash.
+//   * @param salt The salt used to hash the password.
+//   * @return The hashed password.
+//   * @throws IllegalStateException Throws if the password couldn't be hashed.
+//   */
+//  private String encryptPassword(String password, String salt)
+//      throws IllegalStateException {
+//
+//    byte[] salter = Base64.getDecoder().decode(salt);
+//
+//    try {
+//      SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+//      PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salter, 1000, 512);
+//      SecretKey key = skf.generateSecret(spec);
+//      byte[] res = key.getEncoded();
+//      return Base64.getEncoder().encodeToString(res);
+//    }
+//    catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+//      throw new IllegalStateException("not supported.");
+//    }
+//  }
 }

@@ -28,70 +28,70 @@ class UsersDbService extends TimcardDbService {
    */
   private UsersDbConfig dbConfig;
 
-  /**
-   * Inserts a user into the database.
-   * @param dataUser The data user to insert.
-   * @throws DatabaseDataException Throws if the data used in the query was bad.
-   */
-  DataUser insert(DataUser dataUser)
-      throws DatabaseDataException {
-
-    Connection connection = openConnection();
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + dbConfig.getTableName() + " (user_id, username, email, password, salt) VALUES(?, ?, ?, ?, ?)");
-      preparedStatement.setString(1, dataUser.user_id());
-      preparedStatement.setString(2, dataUser.username());
-      preparedStatement.setString(3, dataUser.email());
-      preparedStatement.setString(4, dataUser.password());
-      preparedStatement.setString(5, dataUser.salt());
-
-      //Execute the statement
-      preparedStatement.executeUpdate();
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The user could not be inserted into the database.", ex);
-    }
-
-    //Close the connection.
-    closeConnection(connection);
-  }
-
-  DataUser get(Long id) {
-
-  }
-
-  DataUser get(String user_id) {
-
-  }
-
-  DataUser getByUsername(String username) {
-
-  }
-
-  DataUser getByEmail(String email) {
-
-  }
-
-  Boolean update(DataUser dataUser) {
-
-  }
-
-  Boolean delete(Long id) {
-
-  }
-
-  Boolean delete(String user_id) {
-
-  }
-
-  Boolean deleteByUsername(String username) {
-
-  }
-
-  Boolean deleteByEmail(String email) {
-
-  }
+//  /**
+//   * Inserts a user into the database.
+//   * @param dataUser The data user to insert.
+//   * @throws DatabaseDataException Throws if the data used in the query was bad.
+//   */
+//  DataUser insert(DataUser dataUser)
+//      throws DatabaseDataException {
+//
+//    Connection connection = openConnection();
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + dbConfig.getTableName() + " (user_id, username, email, password, salt) VALUES(?, ?, ?, ?, ?)");
+//      preparedStatement.setString(1, dataUser.user_id());
+//      preparedStatement.setString(2, dataUser.username());
+//      preparedStatement.setString(3, dataUser.email());
+//      preparedStatement.setString(4, dataUser.password());
+//      preparedStatement.setString(5, dataUser.salt());
+//
+//      //Execute the statement
+//      preparedStatement.executeUpdate();
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The user could not be inserted into the database.", ex);
+//    }
+//
+//    //Close the connection.
+//    closeConnection(connection);
+//  }
+//
+//  DataUser get(Long id) {
+//
+//  }
+//
+//  DataUser get(String user_id) {
+//
+//  }
+//
+//  DataUser getByUsername(String username) {
+//
+//  }
+//
+//  DataUser getByEmail(String email) {
+//
+//  }
+//
+//  Boolean update(DataUser dataUser) {
+//
+//  }
+//
+//  Boolean delete(Long id) {
+//
+//  }
+//
+//  Boolean delete(String user_id) {
+//
+//  }
+//
+//  Boolean deleteByUsername(String username) {
+//
+//  }
+//
+//  Boolean deleteByEmail(String email) {
+//
+//  }
 
 
   /**

@@ -29,65 +29,65 @@ class RolesDbService extends TimcardDbService {
    */
   private RolesDbConfig dbConfig;
 
-  DataRole insert(String name) {
-
-  }
-
-  DataRole get(Long id) {
-
-  }
-
-  /**
-   * Gets the data role by name.
-   *
-   * @param name The name of the role.
-   * @return The data role that matches the name.
-   * @throws DatabaseDataException throws if the data used in the query was bad.
-   */
-  DataRole get(String name)
-      throws DatabaseDataException {
-
-    DataRole dataRole = null;
-
-    Connection connection = openConnection();
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE name = ?");
-      preparedStatement.setString(1, name);
-
-      //Execute the statement
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      //Get the dataUser.
-      if (resultSet.next()) {
-        dataRole = new DataRole()
-            .id(resultSet.getLong("id"))
-            .name(resultSet.getString("name"))
-            .date_created(resultSet.getTimestamp("date_created").toInstant())
-            .last_modified(resultSet.getTimestamp("last_modified").toInstant());
-      }
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The data used in the query was bad.", ex);
-    }
-
-    //Close the connection.
-    closeConnection(connection);
-
-    return dataRole;
-  }
-
-  Boolean update(DataRole dataRole) {
-
-  }
-
-  Boolean delete(Long id) {
-
-  }
-
-  Boolean delete(String name) {
-
-  }
+//  DataRole insert(String name) {
+//
+//  }
+//
+//  DataRole get(Long id) {
+//
+//  }
+//
+//  /**
+//   * Gets the data role by name.
+//   *
+//   * @param name The name of the role.
+//   * @return The data role that matches the name.
+//   * @throws DatabaseDataException throws if the data used in the query was bad.
+//   */
+//  DataRole get(String name)
+//      throws DatabaseDataException {
+//
+//    DataRole dataRole = null;
+//
+//    Connection connection = openConnection();
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE name = ?");
+//      preparedStatement.setString(1, name);
+//
+//      //Execute the statement
+//      ResultSet resultSet = preparedStatement.executeQuery();
+//
+//      //Get the dataUser.
+//      if (resultSet.next()) {
+//        dataRole = new DataRole()
+//            .id(resultSet.getLong("id"))
+//            .name(resultSet.getString("name"))
+//            .date_created(resultSet.getTimestamp("date_created").toInstant())
+//            .last_modified(resultSet.getTimestamp("last_modified").toInstant());
+//      }
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The data used in the query was bad.", ex);
+//    }
+//
+//    //Close the connection.
+//    closeConnection(connection);
+//
+//    return dataRole;
+//  }
+//
+//  Boolean update(DataRole dataRole) {
+//
+//  }
+//
+//  Boolean delete(Long id) {
+//
+//  }
+//
+//  Boolean delete(String name) {
+//
+//  }
 
 
   /**

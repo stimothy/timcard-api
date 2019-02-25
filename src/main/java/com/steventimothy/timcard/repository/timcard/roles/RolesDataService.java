@@ -16,19 +16,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class RolesDataService {
 
-  /**
-   * The database layer for the roles table.
-   */
-  private RolesDbService rolesDbService;
-
-  /**
-   * Gets a role id by name.
-   *
-   * @param name The name of the role id.
-   * @return The id of the role.
-   * @throws DatabaseDataException throws if the data used in the query was bad.
-   */
-  public Long getRoleId(String name) throws DatabaseDataException {
-    return rolesDbService.get(name).id();
-  }
+//  /**
+//   * The database layer for the roles table.
+//   */
+//  private RolesDbService rolesDbService;
+//
+//  /**
+//   * Gets a role id by name.
+//   *
+//   * @param name The name of the role id.
+//   * @return The id of the role.
+//   * @throws DatabaseDataException throws if the data used in the query was bad.
+//   */
+//  public Long getRoleId(String name) throws DatabaseDataException {
+//    return rolesDbService.get(name).id();
+//  }
 }

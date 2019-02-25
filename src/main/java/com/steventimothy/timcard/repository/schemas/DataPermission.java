@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 
 /**
  * <h1>The DataPermission Class</h1>
@@ -26,9 +26,9 @@ public class DataPermission {
   /**
    * The date the permission was created.
    */
-  private Instant date_created;
+  private Timestamp date_created;
   /**
    * The date the permission was last updated.
    */
-  private Instant last_modified;
+  private Timestamp last_modified;
 }

@@ -29,146 +29,146 @@ class UserIdsDbService extends TimcardDbService {
    */
   private UserIdsDbConfig dbConfig;
 
-  DataUserId get() {
-
-  }
-
-  DataUserId get(Long id) {
-
-  }
-
-  DataUserId get(String user_id) {
-
-  }
-
-  Boolean update(DataUserId dataUserId, boolean used) {
-
-  }
-
-  /**
-   * Frees up a user id in the database.
-   * @param user_id The user id to free.
-   * @throws DatabaseDataException throws if the data used in the query is bad.
-   */
-  void update(String user_id, boolean used)
-      throws DatabaseDataException {
-
-    Connection connection = openConnection();
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = ? WHERE user_id = ?");
-      preparedStatement.setBoolean(1, used);
-      preparedStatement.setString(2, user_id);
-
-      preparedStatement.executeUpdate();
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The data used in the query was bad.", ex);
-    }
-  }
-
-  /**
-   * Gets a new user id from the database.
-   * @return The new user retrieved from the database.
-   * @throws DatabaseDataException throws if the query was bad.
-   */
-  synchronized DataUserId get()
-      throws DatabaseDataException {
-
-    DataUserId dataUserId = null;
-
-    Connection connection = openConnection();
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE used = FALSE LIMIT 1");
-
-      //Execute the statement
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      //Get the dataUser.
-      if (resultSet.next()) {
-        dataUserId = new DataUserId()
-            .id(resultSet.getLong("id"))
-            .user_id(resultSet.getString("user_id"))
-            .used(resultSet.getBoolean("used"));
-
-        setUsed(dataUserId.id(), connection);
-      }
-
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The query was bad to query the database.", ex);
-    }
-
-    //Close the connection.
-    closeConnection(connection);
-
-    return dataUserId;
-  }
-
-  /**
-   * Gets a new user id from the database.
-   * @return The new user retrieved from the database.
-   * @throws DatabaseDataException throws if the query was bad.
-   */
-  synchronized DataUserId get(String user_id)
-      throws DatabaseDataException {
-
-    DataUserId dataUserId = null;
-
-    Connection connection = openConnection();
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE user_id = ?");
-      preparedStatement.setString(1, user_id);
-
-      //Execute the statement
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      //Get the dataUser.
-      if (resultSet.next()) {
-        dataUserId = new DataUserId()
-            .id(resultSet.getLong("id"))
-            .user_id(resultSet.getString("user_id"))
-            .used(resultSet.getBoolean("used"));
-
-        setUsed(dataUserId.id(), connection);
-      }
-
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The query was bad to query the database.", ex);
-    }
-
-    //Close the connection.
-    closeConnection(connection);
-
-    return dataUserId;
-  }
-
-  /**
-   * Sets a new user id to used.
-   * @param id The id to set to used.
-   * @param connection The connection used to talk to the database.
-   * @throws DatabaseDataException throws if the data used in the query was bad.
-   */
-  private void setUsed(Long id, Connection connection)
-      throws DatabaseDataException {
-
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = TRUE WHERE id = ?");
-      preparedStatement.setLong(1, id);
-
-      int result = preparedStatement.executeUpdate();
-
-      if (result != 1) {
-        throw new DatabaseDataException("There was a problem setting the id to being used.");
-      }
-    }
-    catch (SQLException ex) {
-      throw new DatabaseDataException("The data used in the query was bad.", ex);
-    }
-  }
+//  DataUserId get() {
+//
+//  }
+//
+//  DataUserId get(Long id) {
+//
+//  }
+//
+//  DataUserId get(String user_id) {
+//
+//  }
+//
+//  Boolean update(DataUserId dataUserId, boolean used) {
+//
+//  }
+//
+//  /**
+//   * Frees up a user id in the database.
+//   * @param user_id The user id to free.
+//   * @throws DatabaseDataException throws if the data used in the query is bad.
+//   */
+//  void update(String user_id, boolean used)
+//      throws DatabaseDataException {
+//
+//    Connection connection = openConnection();
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = ? WHERE user_id = ?");
+//      preparedStatement.setBoolean(1, used);
+//      preparedStatement.setString(2, user_id);
+//
+//      preparedStatement.executeUpdate();
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The data used in the query was bad.", ex);
+//    }
+//  }
+//
+//  /**
+//   * Gets a new user id from the database.
+//   * @return The new user retrieved from the database.
+//   * @throws DatabaseDataException throws if the query was bad.
+//   */
+//  synchronized DataUserId get()
+//      throws DatabaseDataException {
+//
+//    DataUserId dataUserId = null;
+//
+//    Connection connection = openConnection();
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE used = FALSE LIMIT 1");
+//
+//      //Execute the statement
+//      ResultSet resultSet = preparedStatement.executeQuery();
+//
+//      //Get the dataUser.
+//      if (resultSet.next()) {
+//        dataUserId = new DataUserId()
+//            .id(resultSet.getLong("id"))
+//            .user_id(resultSet.getString("user_id"))
+//            .used(resultSet.getBoolean("used"));
+//
+//        setUsed(dataUserId.id(), connection);
+//      }
+//
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The query was bad to query the database.", ex);
+//    }
+//
+//    //Close the connection.
+//    closeConnection(connection);
+//
+//    return dataUserId;
+//  }
+//
+//  /**
+//   * Gets a new user id from the database.
+//   * @return The new user retrieved from the database.
+//   * @throws DatabaseDataException throws if the query was bad.
+//   */
+//  synchronized DataUserId get(String user_id)
+//      throws DatabaseDataException {
+//
+//    DataUserId dataUserId = null;
+//
+//    Connection connection = openConnection();
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE user_id = ?");
+//      preparedStatement.setString(1, user_id);
+//
+//      //Execute the statement
+//      ResultSet resultSet = preparedStatement.executeQuery();
+//
+//      //Get the dataUser.
+//      if (resultSet.next()) {
+//        dataUserId = new DataUserId()
+//            .id(resultSet.getLong("id"))
+//            .user_id(resultSet.getString("user_id"))
+//            .used(resultSet.getBoolean("used"));
+//
+//        setUsed(dataUserId.id(), connection);
+//      }
+//
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The query was bad to query the database.", ex);
+//    }
+//
+//    //Close the connection.
+//    closeConnection(connection);
+//
+//    return dataUserId;
+//  }
+//
+//  /**
+//   * Sets a new user id to used.
+//   * @param id The id to set to used.
+//   * @param connection The connection used to talk to the database.
+//   * @throws DatabaseDataException throws if the data used in the query was bad.
+//   */
+//  private void setUsed(Long id, Connection connection)
+//      throws DatabaseDataException {
+//
+//    try {
+//      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET used = TRUE WHERE id = ?");
+//      preparedStatement.setLong(1, id);
+//
+//      int result = preparedStatement.executeUpdate();
+//
+//      if (result != 1) {
+//        throw new DatabaseDataException("There was a problem setting the id to being used.");
+//      }
+//    }
+//    catch (SQLException ex) {
+//      throw new DatabaseDataException("The data used in the query was bad.", ex);
+//    }
+//  }
 
   /**
    * The constructor that receives the autowired components.

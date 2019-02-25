@@ -22,43 +22,46 @@ import java.sql.*;
 class PermissionsDbService extends TimcardDbService {
 
   /**
-   * The config for the permissions table.
+   * The configurations used for the permissions database.
    */
   private PermissionsDbConfig dbConfig;
 
   /**
-   * Creates a data permission in the database.
-   * @param name The name of the data permission.
-   * @return The newly created data permission.
-   * @throws DatabaseDataException throws if there was a conflict with the data
-   * in the query.
+   * Inserts a data permission into the database.
+   * @param dataPermission The data permission to insert.
+   * @return The id of the inserted data permission.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
    */
-  DataPermission insert(String name)
+  Long insert(DataPermission dataPermission)
       throws DatabaseDataException {
 
     Connection connection = openConnection();
 
     try {
-      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + dbConfig.getTableName() + " (name) VALUES(?)");
-      preparedStatement.setString(1, name);
+      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + this.dbConfig.getTableName() + " (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+      preparedStatement.setString(1, dataPermission.name());
 
       preparedStatement.executeUpdate();
+
+      ResultSet resultSet = preparedStatement.getGeneratedKeys();
+      if (resultSet.next()) {
+        dataPermission.id(resultSet.getLong(1));
+      }
     }
     catch (SQLException ex) {
-      throw new DatabaseDataException("There was a problem with the query data.", ex);
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
     }
 
     closeConnection(connection);
 
-    return get(name);
+    return dataPermission.id();
   }
 
   /**
-   * Gets a DataPermission from the database by id.
-   *
-   * @param id The id of the permission
-   * @return The data permission matching the id.
-   * @throws DatabaseDataException throws if the data used to query the database was bad.
+   * Gets a data permission from the database.
+   * @param id The id of the data permission to retrieve.
+   * @return The data permission retrieved from the database.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
    */
   DataPermission get(Long id)
       throws DatabaseDataException {
@@ -68,27 +71,25 @@ class PermissionsDbService extends TimcardDbService {
     Connection connection = openConnection();
 
     try {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE id = ?");
+      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + this.dbConfig.getTableName() + " WHERE id = ?");
       preparedStatement.setLong(1, id);
 
-      dataPermission = getDataPermission(preparedStatement);
+      dataPermission = get(preparedStatement);
     }
     catch (SQLException ex) {
-      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
     }
 
-    //Close the connection.
     closeConnection(connection);
 
     return dataPermission;
   }
 
   /**
-   * Gets a DataPermission from the database by name.
-   *
-   * @param name The name of the permission
-   * @return The data permission matching the name.
-   * @throws DatabaseDataException throws if the data used to query the database was bad.
+   * Gets a data permission from the database.
+   * @param name The name of the data permission to retrieve.
+   * @return The data permission retrieved from the database.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
    */
   DataPermission get(String name)
       throws DatabaseDataException {
@@ -98,16 +99,15 @@ class PermissionsDbService extends TimcardDbService {
     Connection connection = openConnection();
 
     try {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + dbConfig.getTableName() + " WHERE name = ?");
+      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + this.dbConfig.getTableName() + " WHERE name = ?");
       preparedStatement.setString(1, name);
 
-      dataPermission = getDataPermission(preparedStatement);
+      dataPermission = get(preparedStatement);
     }
     catch (SQLException ex) {
-      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
     }
 
-    //Close the connection.
     closeConnection(connection);
 
     return dataPermission;
@@ -115,105 +115,112 @@ class PermissionsDbService extends TimcardDbService {
 
   /**
    * Updates a data permission in the database.
-   * @param dataPermission The data permission in the database to update.
-   * @return True of the data permission was updated successfully.
-   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   * @param dataPermission The data permission containing the new values.
+   * @return True if the data was updated.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
    */
   Boolean update(DataPermission dataPermission)
       throws DatabaseDataException {
 
-    int rowsAffected = 0;
+    int rowsAffected;
 
     Connection connection = openConnection();
 
     try {
-      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + dbConfig.getTableName() + " SET name = ? AND last_modified = ? WHERE id = ?");
+      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + this.dbConfig.getTableName() + " SET name = ?, last_modified = ? WHERE id = ?");
       preparedStatement.setString(1, dataPermission.name());
-      preparedStatement.setTimestamp(2, Timestamp.from(dataPermission.last_modified()));
+      preparedStatement.setTimestamp(2, dataPermission.last_modified());
       preparedStatement.setLong(3, dataPermission.id());
 
       rowsAffected = preparedStatement.executeUpdate();
     }
     catch (SQLException ex) {
-      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
     }
+
+    closeConnection(connection);
 
     return (rowsAffected > 0);
   }
 
   /**
-   * Deletes a data permission in the database.
-   * @param id The id of the data permission.
-   * @return True of the data permission was deleted successfully.
-   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   * Deletes a data permission from the database.
+   * @param id The id of teh data permission to delete.
+   * @return True if the data was deleted.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
    */
   Boolean delete(Long id)
       throws DatabaseDataException {
 
-    int rowsAffected = 0;
+    int rowsAffected;
 
     Connection connection = openConnection();
 
     try {
-      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + dbConfig.getTableName() + " WHERE id = ?");
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + this.dbConfig.getTableName() + " WHERE id = ?");
       preparedStatement.setLong(1, id);
 
       rowsAffected = preparedStatement.executeUpdate();
     }
     catch (SQLException ex) {
-      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
     }
+
+    closeConnection(connection);
 
     return (rowsAffected > 0);
   }
 
   /**
-   * Deletes a data permission in the database.
-   * @param name The name of the data permission.
-   * @return True of the data permission was deleted successfully.
-   * @throws DatabaseDataException Throws if the data used in the query was bad.
+   * Deletes a data permission from the database.
+   * @param name The name of the data permission to delete.
+   * @return True if the data was deleted successfully.
+   * @throws DatabaseDataException Throws if there was a problem with the query to the database.
    */
   Boolean delete(String name)
       throws DatabaseDataException {
 
-    int rowsAffected = 0;
+    int rowsAffected;
 
     Connection connection = openConnection();
 
     try {
-      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + dbConfig.getTableName() + " WHERE name = ?");
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + this.dbConfig.getTableName() + " WHERE name = ?");
       preparedStatement.setString(1, name);
 
       rowsAffected = preparedStatement.executeUpdate();
     }
     catch (SQLException ex) {
-      throw new DatabaseDataException("The data used to query the database was bad.", ex);
+      throw new DatabaseDataException("There was a problem with the query to the database.", ex);
     }
+
+    closeConnection(connection);
 
     return (rowsAffected > 0);
   }
 
   /**
-   * Gets the data permission from the executed query.
-   * @param preparedStatement The prepared statement to query the database.
-   * @return The Data permission retrieved from the database.
-   * @throws SQLException Throws if something went wrong with the data query.
+   * Gets the data permission from the database.
+   * @param preparedStatement The prepared statement containing the query to retrieve the data.
+   * @return The data permission retrieved from the database.
+   * @throws SQLException Throws if there was a problem with the query to the database.
    */
-  private DataPermission getDataPermission(PreparedStatement preparedStatement) throws SQLException {
-    //Execute the statement
+  private DataPermission get(PreparedStatement preparedStatement)
+      throws SQLException {
+
+    DataPermission dataPermission = null;
+
     ResultSet resultSet = preparedStatement.executeQuery();
 
-    //Get the dataPermission.
     if (resultSet.next()) {
-      return new DataPermission()
+      dataPermission = new DataPermission()
           .id(resultSet.getLong("id"))
           .name(resultSet.getString("name"))
-          .date_created(resultSet.getTimestamp("date_created").toInstant())
-          .last_modified(resultSet.getTimestamp("last_modified").toInstant());
+          .date_created(resultSet.getTimestamp("date_created"))
+          .last_modified(resultSet.getTimestamp("last_modified"));
     }
-    else {
-      return null;
-    }
+
+    return dataPermission;
   }
 
 

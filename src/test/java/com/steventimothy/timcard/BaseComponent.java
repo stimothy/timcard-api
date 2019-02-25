@@ -8,6 +8,7 @@ import com.steventimothy.timcard.schemas.ids.users.AdminUserId;
 import com.steventimothy.timcard.schemas.ids.users.GeneralUserId;
 import com.steventimothy.timcard.schemas.ids.users.UserId;
 import com.steventimothy.timcard.schemas.users.User;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,11 +35,17 @@ public abstract class BaseComponent {
   /**
    * The letters of the alphabet for producing random user ids.
    */
-  private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   /**
    * The salt helper for creating a semi unique salt.
    */
   private static final String SALT_HELPER = "8gXDY3goXEcpy7EjitKyqTp2NU60w0a4/z/ue6wGz51ALWI6MWsOKUvgAdu0Mi+R3M53uDJwDvoo6F6BZ";
+  private static SecureRandom secureRandom;
+
+  @BeforeClass
+  public static void setup() {
+    secureRandom = new SecureRandom();
+  }
 
   /**
    * Used to make rest calls.
@@ -263,13 +270,22 @@ public abstract class BaseComponent {
    * @return The raw id created.
    */
   protected String createRandomRawUserId() {
-    SecureRandom secureRandom = new SecureRandom();
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(ALPHABET.charAt(Math.abs(secureRandom.nextInt()) % ALPHABET.length()))
+    stringBuilder.append(getRandomCapitalAlphabet())
         .append('-');
     for (int i = 0; i < 3; ++i) {
-      stringBuilder.append(ALPHABET.charAt(Math.abs(secureRandom.nextInt()) % ALPHABET.length()));
+      stringBuilder.append(getRandomCapitalAlphabet());
+    }
+
+    return stringBuilder.toString();
+  }
+
+  protected String createRandomName() {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    for (int i = 0; i < 25; i++) {
+      stringBuilder.append(getRandomAlphabet());
     }
 
     return stringBuilder.toString();
@@ -311,5 +327,13 @@ public abstract class BaseComponent {
   protected void assertStatus(ResponseEntity responseEntity, HttpStatus status) {
     assertThat(responseEntity.getStatusCode())
         .isEqualTo(status);
+  }
+
+  private char getRandomAlphabet() {
+    return ALPHABET.charAt(Math.abs(secureRandom.nextInt()) % ALPHABET.length());
+  }
+
+  private char getRandomCapitalAlphabet() {
+    return ALPHABET.charAt(Math.abs(secureRandom.nextInt()) % (ALPHABET.length() / 2));
   }
 }

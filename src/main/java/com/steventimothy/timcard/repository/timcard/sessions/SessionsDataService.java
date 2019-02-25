@@ -26,44 +26,44 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionsDataService {
 
-  /**
-   * The sessions database service layer.
-   */
-  private SessionsDbService sessionsDbService;
-  /**
-   * the permissions database service layer.
-   */
-  private PermissionsDataService permissionsDataService;
-  /**
-   * The mapper used to map between encoded values, raw values, and class values.
-   */
-  private IdMapper idMapper;
-
-  /**
-   * Gets the user id from the session.
-   *
-   * @param sessionId The session id to abstract the user id from.
-   * @return The user Id matching the session id given.
-   * @throws InvalidDataException throws if the session could not be found in the database.
-   * @throws DatabaseDataException throws if there was a problem with the data used to query.
-   */
-  public UserId getUserId(SessionId sessionId)
-      throws InvalidDataException, DatabaseDataException {
-
-    String session = idMapper.mapSessionIdToRawId(sessionId);
-
-    DataSession dataSession = sessionsDbService.get(session);
-
-    if (dataSession != null) {
-      UserId userId = new GeneralUserId(dataSession.user_id());
-      if (permissionsDataService.getUserPermissions(userId).contains(Permission.ADMIN)) {
-        userId = new AdminUserId(dataSession.user_id());
-      }
-
-      return userId;
-    }
-    else {
-      throw new InvalidDataException("The user is unknown to the system.");
-    }
-  }
+//  /**
+//   * The sessions database service layer.
+//   */
+//  private SessionsDbService sessionsDbService;
+//  /**
+//   * the permissions database service layer.
+//   */
+//  private PermissionsDataService permissionsDataService;
+//  /**
+//   * The mapper used to map between encoded values, raw values, and class values.
+//   */
+//  private IdMapper idMapper;
+//
+//  /**
+//   * Gets the user id from the session.
+//   *
+//   * @param sessionId The session id to abstract the user id from.
+//   * @return The user Id matching the session id given.
+//   * @throws InvalidDataException throws if the session could not be found in the database.
+//   * @throws DatabaseDataException throws if there was a problem with the data used to query.
+//   */
+//  public UserId getUserId(SessionId sessionId)
+//      throws InvalidDataException, DatabaseDataException {
+//
+//    String session = idMapper.mapSessionIdToRawId(sessionId);
+//
+//    DataSession dataSession = sessionsDbService.get(session);
+//
+//    if (dataSession != null) {
+//      UserId userId = new GeneralUserId(dataSession.user_id());
+//      if (permissionsDataService.getUserPermissions(userId).contains(Permission.ADMIN)) {
+//        userId = new AdminUserId(dataSession.user_id());
+//      }
+//
+//      return userId;
+//    }
+//    else {
+//      throw new InvalidDataException("The user is unknown to the system.");
+//    }
+//  }
 }

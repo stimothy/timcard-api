@@ -1,13 +1,8 @@
 package com.steventimothy.timcard.uas.controllers;
 
-import com.steventimothy.timcard.schemas.ids.sessions.SessionId;
-import com.steventimothy.timcard.uas.services.UserAuthorizationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,21 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserAuthorizationController {
 
-  /**
-   * The class that contains the logic for these endpoints.
-   */
-  private UserAuthorizationService userAuthorizationService;
-
-  /**
-   * Gets a general session id to use in the system.
-   *
-   * @return The general session id.
-   */
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity getGeneralSessionId() {
-    SessionId sessionId = this.userAuthorizationService.createGeneralSessionId();
-
-    log.info("[200] GET: /uas - Response: body={}", sessionId);
-    return ResponseEntity.ok(sessionId);
-  }
+//  /**
+//   * The class that contains the logic for these endpoints.
+//   */
+//  private UserAuthorizationService userAuthorizationService;
+//
+//  /**
+//   * Gets a general session id to use in the system.
+//   *
+//   * @return The general session id.
+//   */
+//  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//  public ResponseEntity getGeneralSessionId() {
+//    SessionId sessionId = this.userAuthorizationService.createGeneralSessionId();
+//
+//    log.info("[200] GET: /uas - Response: body={}", sessionId);
+//    return ResponseEntity.ok(sessionId);
+//  }
 }

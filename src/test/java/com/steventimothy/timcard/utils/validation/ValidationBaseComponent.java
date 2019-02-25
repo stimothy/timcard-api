@@ -9,19 +9,19 @@ import java.util.List;
 
 public abstract class ValidationBaseComponent extends UtilsBaseComponent {
 
-  /**
-   * The utility used for validating permissions of a user.
-   */
-  @Autowired
-  private IdentityUtil identityUtil;
-
-  /**
-   * Validates that a user has certain permissions.
-   * @param encodedValue The encoded value of the session of the user.
-   * @param permissions The list of permissions the user needs.
-   * @return The sessionId of the user if everything was validated.
-   */
-  protected SessionId validateUserPermissions(String encodedValue, List<Permission> permissions) {
-    return this.identityUtil.validateUserPermissions(encodedValue, permissions);
-  }
+//  /**
+//   * The utility used for validating permissions of a user.
+//   */
+//  @Autowired
+//  private IdentityUtil identityUtil;
+//
+//  /**
+//   * Validates that a user has certain permissions.
+//   * @param encodedValue The encoded value of the session of the user.
+//   * @param permissions The list of permissions the user needs.
+//   * @return The sessionId of the user if everything was validated.
+//   */
+//  protected SessionId validateUserPermissions(String encodedValue, List<Permission> permissions) {
+//    return this.identityUtil.validateUserPermissions(encodedValue, permissions);
+//  }
 }

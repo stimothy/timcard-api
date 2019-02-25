@@ -25,45 +25,45 @@ import java.util.stream.Collectors;
 @Component
 public class UserRolesDataService {
 
-  /**
-   * The database layer to talk to the user_roles table.
-   */
-  private UserRolesDbService userRolesDbService;
-  /**
-   * The utility used for mapping ids.
-   */
-  private IdMapper idMapper;
-  /**
-   * The data service layer to talk to the roles data table.
-   */
-  private RolesDataService rolesDataService;
-
-  /**
-   * Gets the role ids of linked to the user.
-   * @param userId The user id of the user.
-   * @return The roles ids linked to the user.
-   * @throws InvalidDataException throws if the user id cannot be mapped to a raw id.
-   * @throws DatabaseDataException throws if the data used to query the database was bad.
-   */
-  public List<Long> getRoleIds(UserId userId)
-      throws InvalidDataException, DatabaseDataException {
-
-    return userRolesDbService.getAll(idMapper.mapUserIdToRawId(userId)).stream()
-        .map(DataUserRole::role_id)
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * Adds a role to a user.
-   * @param userId The user id of the user to add the role to.
-   * @param role The role to add to the user.
-   * @throws InvalidDataException Throws if the userId was bad.
-   * @throws DatabaseDataException Throws if the data used in the query was bad.
-   */
-  public void addRole(UserId userId, Role role)
-      throws InvalidDataException, DatabaseDataException {
-
-    Long role_id = rolesDataService.getRoleId(role.getValue());
-    userRolesDbService.insert(idMapper.mapUserIdToRawId(userId), role_id);
-  }
+//  /**
+//   * The database layer to talk to the user_roles table.
+//   */
+//  private UserRolesDbService userRolesDbService;
+//  /**
+//   * The utility used for mapping ids.
+//   */
+//  private IdMapper idMapper;
+//  /**
+//   * The data service layer to talk to the roles data table.
+//   */
+//  private RolesDataService rolesDataService;
+//
+//  /**
+//   * Gets the role ids of linked to the user.
+//   * @param userId The user id of the user.
+//   * @return The roles ids linked to the user.
+//   * @throws InvalidDataException throws if the user id cannot be mapped to a raw id.
+//   * @throws DatabaseDataException throws if the data used to query the database was bad.
+//   */
+//  public List<Long> getRoleIds(UserId userId)
+//      throws InvalidDataException, DatabaseDataException {
+//
+//    return userRolesDbService.getAll(idMapper.mapUserIdToRawId(userId)).stream()
+//        .map(DataUserRole::role_id)
+//        .collect(Collectors.toList());
+//  }
+//
+//  /**
+//   * Adds a role to a user.
+//   * @param userId The user id of the user to add the role to.
+//   * @param role The role to add to the user.
+//   * @throws InvalidDataException Throws if the userId was bad.
+//   * @throws DatabaseDataException Throws if the data used in the query was bad.
+//   */
+//  public void addRole(UserId userId, Role role)
+//      throws InvalidDataException, DatabaseDataException {
+//
+//    Long role_id = rolesDataService.getRoleId(role.getValue());
+//    userRolesDbService.insert(idMapper.mapUserIdToRawId(userId), role_id);
+//  }
 }
